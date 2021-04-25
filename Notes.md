@@ -11,9 +11,9 @@
 
 ## 25 Aprile 2021
 
-- aa
-- aa
-- aa
+- Ottenimento di tutti i dataset CIG
+- Creazione di funzioni per importare, pulire ed aggregare i dataset
+- Aggiunta del dataset completo e pulito a database MySQL
 
 ---
 

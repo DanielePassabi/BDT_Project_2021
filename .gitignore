@@ -5,3 +5,9 @@ datasets/pubblicazioni_csv_0.csv
 application/datasets/aggiudicazioni_csv_0.csv
 application/datasets/aggiudicatori/aggiudicatari_csv_0.csv
 application/datasets/pubblicazioni_csv_0.csv
+application/datasets/cig/cig_csv_2011_02.csv
+application/datasets/cig/cig_csv_2011_03.csv
+application/datasets/cig/cig_csv_2011_05.csv
+application/datasets/cig/cig_csv_2011_04.csv
+application/datasets/clean_data/full_dataset.csv
+application/datasets/aggiudicatari/aggiudicatari_csv_0.csv
