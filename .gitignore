@@ -2,3 +2,6 @@
 datasets/aggiudicatari_csv_0.csv
 datasets/aggiudicazioni_csv_0.csv
 datasets/pubblicazioni_csv_0.csv
+application/datasets/aggiudicazioni_csv_0.csv
+application/datasets/aggiudicatori/aggiudicatari_csv_0.csv
+application/datasets/pubblicazioni_csv_0.csv

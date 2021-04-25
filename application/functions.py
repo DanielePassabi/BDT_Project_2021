@@ -3,6 +3,59 @@ import pandas as pd
 from sklearn import neighbors
 import numpy as np
 
+#
+# FUNZIONI PER IMPORT DATAFRAME
+#
+
+def unisciCIG(cigs_path):
+
+    # conta file nella cartella
+
+    # ottiene i nomi dei file
+
+    # ottiene i file usando importaCIG
+
+    # usa la funzione pulisciCIG su ogni df
+
+    # unisce in un dataset unico di CIG
+
+    pass
+
+"""
+Importa un dataset CIG
+Input: path del dataset CIG
+Output: pandas dataframe
+"""
+def importaCIG(cig_path):
+    df = pd.read_csv(cig_path, sep=";")
+    return df
+
+def pulisciCIG(cig_df):
+
+    # vedi operazioni di KNIME e replica
+    pass
+
+
+def importaAggiudicatori(agg_path):
+
+    # importa il dataframe 
+    pass
+
+def pulisciAggiudicatori(agg_df):
+
+    # vedi operazioni di KNIME e replica
+    pass
+
+
+def joinCIGAggiudicatori(cig_df, agg_df):
+    pass
+
+
+
+#
+# FUNZIONI PER ARCHITETTURA
+#
+
 """
 Funzione per addestrare un modello KNN, a partire da:
     > dataset, che deve avere le colonne
