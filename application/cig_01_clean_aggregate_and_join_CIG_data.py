@@ -33,3 +33,10 @@ print("> Dataset correctly saved in '", save_path, "'")
 
 end = time.time()
 print("\n> Elapsed time:", from_seconds_to_elapsed_time(end - start))
+
+# NOTE
+
+# This code is meant to be executed once
+# It creates a .csv with all the CIG join AGGIUDICATARI, which is then uploaded to the MySQL DB (by script cig_02)
+
+# To update the CIG join AGGIUDICATARI db, use script cig_03

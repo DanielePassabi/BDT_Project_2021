@@ -3,9 +3,13 @@ import pandas as pd
 from sklearn import neighbors
 import numpy as np
 
+import sys
+
 from os import listdir
 from os.path import isfile, join
 from tqdm import tqdm
+
+import mysql.connector
 
 """
 FUNCTIONS FOR NEW DATAFRAMES
@@ -165,6 +169,139 @@ def joinCIGAggiudicatari(cig_df, agg_df):
     # return the complete dataframe
     return full_df
 
+
+"""
+FUNCTIONS FOR MYSQL
+"""
+
+"""
+Establish a MySQL Connection
+
+Input:
+    > host
+    > port
+    > database
+    > user
+    > password
+Output: connection object
+"""
+def connectToMySQL(host, port, database, user, password):
+    print("\n> Trying to connect to MySQL Server with the following parameters")
+    print("   - host:", host)
+    print("   - port:", port)
+    print("   - database:", database)
+    print("   - user:", user)
+
+    try:
+        connection = mysql.connector.connect(
+            host = host,
+            port = port,
+            database = database,
+            user = user,
+            password = "dany1998"
+        )
+
+        print("\n> Successfully connected")
+        return connection
+
+    except Exception as e:
+        print("\n> ERROR: cannot connect to the database. Error details below.\n" + str(e))
+        sys.exit("\n> Execution Interrupted")
+
+
+"""
+Set the autocommit to either True or False
+
+Input:
+    > connection object
+    > boolean value
+Output: none
+"""
+def setAutocommit(connection, bool_value):
+    connection.autocommit = bool_value
+    print("> Autocommit set to", bool_value)
+
+
+"""
+Create a cursor
+
+Input: connection object
+Output: cursor
+"""
+def createCursor(connection):
+    return connection.cursor()
+
+
+"""
+Insert into the connected MySQL db the data from the given dataframe
+
+Input:
+    > df: dataframe with the data to add to the db
+    > cursor
+    > table_name: name of the table in which the information will be added
+    > cols_list: list of columns present in both the df and the table
+"""
+def executeInsertQuery(df, cursor, table_name, cols_list):
+
+    # Get the names of all the columns (in string format for MySQL)
+    cols_names = "("
+    for col in cols_list:
+        cols_names = cols_names + col + ","
+    cols_names = cols_names[:-1] + ")"
+
+    # Get all the placeholders set
+    values_placeholders = "("
+    for i in range(len(cols_list)):
+        values_placeholders = values_placeholders + "%s,"
+    values_placeholders = values_placeholders[:-1] + ")"
+
+    # create the query
+    query = "INSERT into " + table_name + " " + cols_names + " VALUES " + values_placeholders
+
+    # execute the query
+    print("\n> DB population started")
+
+    # tqdm does not work --> we track % manually
+    total_rows = df.shape[0]
+    n = 1
+
+    try:
+
+        for i, row in df.iterrows():
+            
+            if (i % 50000 == 0 and i != 0):
+                rows_updated = n*i
+                completion_perc = round(rows_updated / total_rows, 4)
+                print(">> Completed: ", completion_perc, "%")
+                n = n+1
+
+            query_list = []
+            for col in cols_list:
+                query_list.append(row[col])
+
+            cursor.execute(query, tuple(query_list))
+        
+    except Exception as e:
+        print("\n> ERROR: cannot add the row to the database. Error details below.\n" + str(e))
+        sys.exit("\n> Execution Interrupted")
+        
+
+    print("\n> Data added to the database")
+
+
+"""
+Closes the connection with MySQL server
+
+Input:
+    > cursor
+    > connection
+Output: none
+"""
+def closeMySQLConnection(cursor, connection):
+    print("\n> Closing the connection")
+    cursor.close()
+    connection.close()
+    print("> Connection closed successfully")
 
 
 """

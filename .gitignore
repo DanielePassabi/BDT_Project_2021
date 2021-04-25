@@ -11,3 +11,6 @@ application/datasets/cig/cig_csv_2011_05.csv
 application/datasets/cig/cig_csv_2011_04.csv
 application/datasets/clean_data/full_dataset.csv
 application/datasets/aggiudicatari/aggiudicatari_csv_0.csv
+application/datasets/various_data/aggiudicazioni_csv_0.csv
+application/datasets/various_data/pubblicazioni_csv_0.csv
+application/datasets/clean_data/aggiudicatari.csv
