@@ -18,7 +18,7 @@ database = "db_bdt_project"
 user = "root"
 password = "dany1998"
 
-connection = connectToMySQL(host, port, database, user, password)
+connection = connectToMySQL(host, port, database, user, password, False)
 setAutocommit(connection, True)
 cursor = createCursor(connection)
 
@@ -27,7 +27,7 @@ table_name = "appalti_aggiudicatari_test"
 cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
 
 # execute the query
-executeInsertQuery(df, cursor, table_name, cols_list)
+insertDataInTable(df, cursor, table_name, cols_list)
 
 # close the connection
 closeMySQLConnection(cursor, connection)

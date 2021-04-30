@@ -10,6 +10,7 @@ from os.path import isfile, join
 from tqdm import tqdm
 
 import mysql.connector
+from sqlalchemy import create_engine
 
 """
 FUNCTIONS FOR NEW DATAFRAMES
@@ -183,14 +184,16 @@ Input:
     > database
     > user
     > password
+    > showInfo: boolean value
 Output: connection object
 """
-def connectToMySQL(host, port, database, user, password):
-    print("\n> Trying to connect to MySQL Server with the following parameters")
-    print("   - host:", host)
-    print("   - port:", port)
-    print("   - database:", database)
-    print("   - user:", user)
+def connectToMySQL(host, port, database, user, password, showInfo):
+    if showInfo:
+        print("\n> Trying to connect to MySQL Server with the following parameters")
+        print("   - host:", host)
+        print("   - port:", port)
+        print("   - database:", database)
+        print("   - user:", user)
 
     try:
         connection = mysql.connector.connect(
@@ -201,12 +204,61 @@ def connectToMySQL(host, port, database, user, password):
             password = "dany1998"
         )
 
-        print("\n> Successfully connected")
+        if showInfo:
+            print("\n> Successfully connected")
         return connection
 
     except Exception as e:
         print("\n> ERROR: cannot connect to the database. Error details below.\n" + str(e))
         sys.exit("\n> Execution Interrupted")
+
+
+"""
+Establish a MySQL Connection (using the package sqlalchemy)
+
+Input:
+    > host
+    > port
+    > database
+    > user
+    > password
+    > showInfo: boolean value
+Output: connection object
+"""
+def connectToMySQL_Alchemy(host, port, database, user, password, showInfo):
+    if showInfo:
+        print("\n> Trying to connect to MySQL Server with the following parameters")
+        print("   - host:", host)
+        print("   - port:", port)
+        print("   - database:", database)
+        print("   - user:", user)
+
+    try:
+        connection_str = "mysql+pymysql://" + user + ":" + password + "@" + host + "/" + database
+        connection = create_engine(connection_str)
+
+        if showInfo:
+            print("\n> Successfully connected")
+        return connection
+
+    except Exception as e:
+        print("\n> ERROR: cannot connect to the database. Error details below.\n" + str(e))
+        sys.exit("\n> Execution Interrupted")
+
+
+"""
+Retrieve all data from specified table
+
+Input:
+    > table
+    > connection (sqlalchemy object)
+Output:
+    > table (in pandas dataframe form)
+"""
+def retrieveAllDataFromTable_Alchemy(table, connection):
+    query = "SELECT * FROM " + table
+    res_df = pd.read_sql(query, con=connection)
+    return res_df
 
 
 """
@@ -219,7 +271,7 @@ Output: none
 """
 def setAutocommit(connection, bool_value):
     connection.autocommit = bool_value
-    print("> Autocommit set to", bool_value)
+    #print("> Autocommit set to", bool_value)
 
 
 """
@@ -241,7 +293,7 @@ Input:
     > table_name: name of the table in which the information will be added
     > cols_list: list of columns present in both the df and the table
 """
-def executeInsertQuery(df, cursor, table_name, cols_list):
+def insertDataInTable(df, cursor, table_name, cols_list):
 
     # Get the names of all the columns (in string format for MySQL)
     cols_names = "("
@@ -259,7 +311,7 @@ def executeInsertQuery(df, cursor, table_name, cols_list):
     query = "INSERT into " + table_name + " " + cols_names + " VALUES " + values_placeholders
 
     # execute the query
-    print("\n> DB population started")
+    #print("\n> Inserting data into", table_name, "table")
 
     # tqdm does not work --> we track % manually
     total_rows = df.shape[0]
@@ -285,8 +337,7 @@ def executeInsertQuery(df, cursor, table_name, cols_list):
         print("\n> ERROR: cannot add the row to the database. Error details below.\n" + str(e))
         sys.exit("\n> Execution Interrupted")
         
-
-    print("\n> Data added to the database")
+    #print("\n> Data added to the database")
 
 
 """
@@ -298,10 +349,9 @@ Input:
 Output: none
 """
 def closeMySQLConnection(cursor, connection):
-    print("\n> Closing the connection")
     cursor.close()
     connection.close()
-    print("> Connection closed successfully")
+    #print("> MySQL connection closed successfully")
 
 
 """
