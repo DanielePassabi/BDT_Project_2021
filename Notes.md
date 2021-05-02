@@ -11,9 +11,11 @@
 
 ## 25 Aprile 2021
 
-- aa
-- aa
-- aa
+- Ottenimento di tutti i dataset CIG
+- Creazione di funzioni per importare, pulire ed aggregare i dataset
+- Aggiunta del dataset completo e pulito degli *aggiudicatari* al database MySQL
+- Aggiunta del dataset completo e pulito di *CIG* join *aggiudicatari* al database MySQL
+- Valutazione nuove features a partire dai dati `aggiudicazioni.csv`
 
 ---
 
@@ -73,9 +75,15 @@ Per quanto riguarda il dataset **AGGIUDICATARI**
 
 ## *Cosa fare ora?*
 
-[x] Che dati ci sono, come sono fatti, cosa ce ne dobbiamo fare?
+[X] Che dati ci sono, come sono fatti, cosa ce ne dobbiamo fare?
 
-[ ] Sistema ad alto livello: capire l'utente cosa vede e cosa fa.
+[X] Sistema ad alto livello: capire l'utente cosa vede e cosa fa. --> Interfaccia grafica
+
+[ ] Chiedere al prof come fare l'update su MySQL della table ELENCO_AGGIUDICATARI
+
+  - non vengono forniti nuovi .csv, ma lo stesso viene aggiornato
+
+[ ] Finire script cig_03 (update CIG join AGGIUDICATARI con nuovi dati del mese)
 
 [ ] Capire che architettura ML utilizzare per poter usare al meglio tutte le features.
 
