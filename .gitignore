@@ -14,3 +14,4 @@ application/datasets/aggiudicatari/aggiudicatari_csv_0.csv
 application/datasets/various_data/aggiudicazioni_csv_0.csv
 application/datasets/various_data/pubblicazioni_csv_0.csv
 application/datasets/clean_data/aggiudicatari.csv
+*.csv

@@ -1,10 +1,38 @@
+from functions import *
+
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-
 import pandas as pd
-
-from functions import *
 import time
+
+"""
+# This code is used to update the CIG join AGGIUDICATARI table in a MySQL DB
+
+# 1. It prompts the user to select a (raw) CIG .csv with updated data
+# 2. It cleans the new data
+# 3. It retrieves the AGGIUDICATARI data from MySQL DB
+# 4. It joines the new CIG data with AGGIUDICATARI data
+# 5. It exports to the db the joined data
+"""
+
+################
+### SETTINGS ###
+################
+
+# MySQL database
+host = "127.0.0.1"
+port = 3306
+database = "db_bdt_project"
+user = "root"
+password = "dany1998"
+
+table_agg = "elenco_aggiudicatari"
+table_cig_agg = "appalti_aggiudicatari_test"
+cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
+
+##############
+### SCRIPT ###
+##############
 
 # Tracking the time
 start = time.time()
@@ -28,17 +56,10 @@ print("> CIG data cleaned")
 print("\n> Retrieving AGGIUDICATARI data from MySQL DB")
 
 # 1. Establish MySQL connection
-host = "127.0.0.1"
-port = 3306
-database = "db_bdt_project"
-user = "root"
-password = "dany1998"
-
 db_connection = connectToMySQL_Alchemy(host, port, database, user, password, False)
 
 # 2. Retrieve the AGGIUDICATARI data
-table = "elenco_aggiudicatari"
-agg_df = retrieveAllDataFromTable_Alchemy(table, db_connection)
+agg_df = retrieveAllDataFromTable_Alchemy(table_agg, db_connection)
 
 print("> AGGIUDICATARI data retrieved")
 
@@ -46,26 +67,21 @@ print("> AGGIUDICATARI data retrieved")
 print("\n> Joining CIG data with AGGIUDICATARI data")
 full_df = joinCIGAggiudicatari(cig_df, agg_df)
 
-
 # Add new data to MySQL appalti_aggiudicatari table
 
-# A. create query information
-table_name = "appalti_aggiudicatari_test"
-cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
-
-# B. connect to db
+# A. connect to db
 connection = connectToMySQL(host, port, database, user, password, False)
 setAutocommit(connection, True)
 cursor = createCursor(connection)
 
-# C. execute the query
-print("\n> Inserting data into", table_name)
-insertDataInTable(full_df, cursor, table_name, cols_list)
+# B. execute the query
+print("\n> Inserting data into", table_cig_agg)
+insertDataInTable(full_df, cursor, table_cig_agg, cols_list)
 print("> BD correctly updated")
 
-# D. close the connection
+# C. close the connection
 closeMySQLConnection(cursor, connection)
 
-# calculate and print total time
+# Calculate and print total time
 end = time.time()
 print("\n> Elapsed time:", from_seconds_to_elapsed_time(end - start))

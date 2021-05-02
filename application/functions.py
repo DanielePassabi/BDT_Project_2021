@@ -4,6 +4,7 @@ from sklearn import neighbors
 import numpy as np
 
 import sys
+import time
 
 from os import listdir
 from os.path import isfile, join
@@ -31,7 +32,7 @@ def mergeCIG(cigs_path):
     frames = []
 
     # iterate over every CIG dataset
-    for file_name in tqdm(file_names, desc=">> Cleaning and merging CIGs"):
+    for file_name in tqdm(file_names, desc="> Cleaning and merging CIGs"):
 
         # get the path
         temp_cig_path = cigs_path + file_name
@@ -97,7 +98,7 @@ def mergeAggiudicatari(aggiudicatari_path):
     final_df = pd.DataFrame()
 
     # iterate over every Aggiudicatari dataset
-    for file_name in tqdm(file_names, desc=">> Cleaning and merging Aggiudicatari"):
+    for file_name in tqdm(file_names, desc="> Cleaning and merging Aggiudicatari"):
 
         # get the path
         temp_agg_path = aggiudicatari_path + file_name
@@ -176,44 +177,6 @@ FUNCTIONS FOR MYSQL
 """
 
 """
-Establish a MySQL Connection
-
-Input:
-    > host
-    > port
-    > database
-    > user
-    > password
-    > showInfo: boolean value
-Output: connection object
-"""
-def connectToMySQL(host, port, database, user, password, showInfo):
-    if showInfo:
-        print("\n> Trying to connect to MySQL Server with the following parameters")
-        print("   - host:", host)
-        print("   - port:", port)
-        print("   - database:", database)
-        print("   - user:", user)
-
-    try:
-        connection = mysql.connector.connect(
-            host = host,
-            port = port,
-            database = database,
-            user = user,
-            password = "dany1998"
-        )
-
-        if showInfo:
-            print("\n> Successfully connected")
-        return connection
-
-    except Exception as e:
-        print("\n> ERROR: cannot connect to the database. Error details below.\n" + str(e))
-        sys.exit("\n> Execution Interrupted")
-
-
-"""
 Establish a MySQL Connection (using the package sqlalchemy)
 
 Input:
@@ -259,6 +222,44 @@ def retrieveAllDataFromTable_Alchemy(table, connection):
     query = "SELECT * FROM " + table
     res_df = pd.read_sql(query, con=connection)
     return res_df
+
+
+"""
+Establish a MySQL Connection
+
+Input:
+    > host
+    > port
+    > database
+    > user
+    > password
+    > showInfo: boolean value
+Output: connection object
+"""
+def connectToMySQL(host, port, database, user, password, showInfo):
+    if showInfo:
+        print("\n> Trying to connect to MySQL Server with the following parameters")
+        print("   - host:", host)
+        print("   - port:", port)
+        print("   - database:", database)
+        print("   - user:", user)
+
+    try:
+        connection = mysql.connector.connect(
+            host = host,
+            port = port,
+            database = database,
+            user = user,
+            password = password
+        )
+
+        if showInfo:
+            print("\n> Successfully connected")
+        return connection
+
+    except Exception as e:
+        print("\n> ERROR: cannot connect to the database. Error details below.\n" + str(e))
+        sys.exit("\n> Execution Interrupted")
 
 
 """
@@ -315,17 +316,13 @@ def insertDataInTable(df, cursor, table_name, cols_list):
 
     # tqdm does not work --> we track % manually
     total_rows = df.shape[0]
-    n = 1
 
     try:
 
-        for i, row in df.iterrows():
-            
-            if (i % 50000 == 0 and i != 0):
-                rows_updated = n*i
-                completion_perc = round(rows_updated / total_rows, 4)
-                print(">> Completed: ", completion_perc, "%")
-                n = n+1
+        for i, row in df.reset_index().iterrows():
+
+            completion_perc = str(round(((i+1) / total_rows) * 100, 2))
+            print("\r> Inserting rows: " + str(i+1) + "/" + str(total_rows) + " [" + completion_perc + "%]", end="")
 
             query_list = []
             for col in cols_list:
@@ -336,8 +333,6 @@ def insertDataInTable(df, cursor, table_name, cols_list):
     except Exception as e:
         print("\n> ERROR: cannot add the row to the database. Error details below.\n" + str(e))
         sys.exit("\n> Execution Interrupted")
-        
-    #print("\n> Data added to the database")
 
 
 """
@@ -352,6 +347,129 @@ def closeMySQLConnection(cursor, connection):
     cursor.close()
     connection.close()
     #print("> MySQL connection closed successfully")
+
+
+"""
+FUNCTIONS FOR UPDATE OF MYSQL DATABASE
+"""
+
+"""
+Updates the AGGIUDICATARI table in a MySQL DB
+
+Input:
+    > host
+    > port
+    > database
+    > user
+    > password
+    > agg_csv_path: path of (raw) AGGIUDICATARI .csv with updated data
+"""
+def updateAggiudicatariTable(host, port, database, user, password, agg_csv_path):
+    
+    # Query information
+    table_name = "elenco_aggiudicatari_test"
+    cols_list = ["cig", "aggiudicatario", "tipo_aggiudicatario"]
+
+    # Tracking the time
+    start = time.time()
+
+    print("\n> Updating AGGIUDICATARI datasets")
+
+    new_agg_df = importAggiudicatari(agg_csv_path)
+    print("> AGGIUDICATARI .csv correctly imported")
+
+    # Clean the AGGIUDICATARI df
+    new_agg_df = cleanAggiudicatari(new_agg_df)
+    print("> AGGIUDICATARI data cleaned")
+
+    # Establish MySQL connection (alchemy)
+    db_connection = connectToMySQL_Alchemy(host, port, database, user, password, False)
+
+    # Retrieve the current AGGIUDICATARI data
+    old_agg_df = retrieveAllDataFromTable_Alchemy(table_name, db_connection)
+
+    # Find only new data
+    new_entries = pd.concat([old_agg_df,new_agg_df]).drop_duplicates(keep=False)
+
+    # Establish MySQL connection
+    connection = connectToMySQL(host, port, database, user, password, False)
+    setAutocommit(connection, True)
+    cursor = createCursor(connection)
+
+    # Inserting new AGGIUDICATARI data into the db
+    print("\n> Inserting new data into", table_name)
+    insertDataInTable(new_entries, cursor, table_name, cols_list)
+    print("\n> BD correctly updated")
+
+    # Calculate and print total time
+    end = time.time()
+    print("\n> Elapsed time:", from_seconds_to_elapsed_time(end - start))
+
+
+"""
+Updates the CIG join AGGIUDICATARI table in a MySQL DB
+
+Input:
+    > host
+    > port
+    > database
+    > user
+    > password
+    > cig_csv_path: path of (raw) CIG .csv with updated data
+"""
+def updateCIGTable(host, port, database, user, password, cig_csv_path):
+    table_agg = "elenco_aggiudicatari"
+    table_cig_agg = "appalti_aggiudicatari_test"
+    cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
+
+
+    # Tracking the time
+    start = time.time()
+
+    print("\n> Updating CIG AGGIUDICATARI datasets")
+
+    # Prompt the user to select a .csv
+    cig_df = importCIG(cig_csv_path)
+    print("> CIG .csv correctly imported")
+
+    # Clean the CIG df
+    cig_df = cleanCIG(cig_df)
+    print("> CIG data cleaned")
+
+    # Retrieval of AGGIUDICATARI from MySQL DB
+    print("\n> Retrieving AGGIUDICATARI data from MySQL DB")
+
+    # 1. Establish MySQL connection
+    db_connection = connectToMySQL_Alchemy(host, port, database, user, password, False)
+
+    # 2. Retrieve the AGGIUDICATARI data
+    agg_df = retrieveAllDataFromTable_Alchemy(table_agg, db_connection)
+
+    print("> AGGIUDICATARI data retrieved")
+
+    # Inner Join of new CIG data and AGGIUDICATARI
+    print("\n> Joining CIG data with AGGIUDICATARI data")
+    full_df = joinCIGAggiudicatari(cig_df, agg_df)
+
+    # Add new data to MySQL appalti_aggiudicatari table
+
+    # A. connect to db
+    connection = connectToMySQL(host, port, database, user, password, False)
+    setAutocommit(connection, True)
+    cursor = createCursor(connection)
+
+    # B. execute the query
+    print("\n> Inserting data into", table_cig_agg)
+    insertDataInTable(full_df, cursor, table_cig_agg, cols_list)
+    print("\n> BD correctly updated")
+
+    # C. close the connection
+    closeMySQLConnection(cursor, connection)
+
+    # Calculate and print total time
+    end = time.time()
+    print("\n> Elapsed time:", from_seconds_to_elapsed_time(end - start))
+
 
 
 """
@@ -417,4 +535,3 @@ def from_seconds_to_elapsed_time(seconds):
     seconds %= 60
       
     return "%d:%02d:%02d" % (hour, minutes, seconds)
-      

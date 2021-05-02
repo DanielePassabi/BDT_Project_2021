@@ -3,15 +3,15 @@ import time
 
 """
 # This code is meant to be executed once
-# It exports the clean .csv with all the CIG join AGGIUDICATARI data to a MySQL DB
+# It exports the clean .csv with all the AGGIUDICATARI data to a MySQL DB
 """
 
 ################
 ### SETTINGS ###
 ################
 
-# Location of final CIG_join_AGGIUDICATARI .csv
-csv_path = "datasets/clean_data/appalti_aggiudicatari_10k.csv"
+# Location of final AGGIUDICATARI .csv
+agg_path = "datasets/clean_data/elenco_aggiudicatari_1M.csv"
 
 # MySQL database
 host = "127.0.0.1"
@@ -21,8 +21,8 @@ user = "root"
 password = "dany1998"
 
 # Query information
-table_name = "appalti_aggiudicatari_test"
-cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
+table_name = "elenco_aggiudicatari_test"
+cols_list = ["cig", "aggiudicatario", "tipo_aggiudicatario"]
 
 ##############
 ### SCRIPT ###
@@ -31,9 +31,9 @@ cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componen
 # Tracking the time
 start = time.time()
 
-# Dataset import
-print("\n> Importing the data from the CIG_AGGIUDICATARI .csv")
-df = pd.read_csv(csv_path, sep=";")
+# Final AGGIUDICATARI .csv data import
+print("\n> Importing the data from the AGGIUDICATARI .csv")
+df = importAggiudicatari(agg_path)
 
 # Establish MySQL connection
 connection = connectToMySQL(host, port, database, user, password, False)
@@ -41,7 +41,9 @@ setAutocommit(connection, True)
 cursor = createCursor(connection)
 
 # Execute the query
+print("\n> Inserting data into", table_name)
 insertDataInTable(df, cursor, table_name, cols_list)
+print("> BD correctly updated")
 
 # Close the connection
 closeMySQLConnection(cursor, connection)
