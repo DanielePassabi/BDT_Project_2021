@@ -33,6 +33,8 @@ What is:
     - link to material
     
     [More info](https://wiki.creativecommons.org/License_Versions#Detailed_attribution_comparison_chart)
+    
+    [Examples](https://wiki.creativecommons.org/wiki/Best_practices_for_attribution#Examples_of_attribution)
 
 - if changes were made: indicate if you modified the material and retain an indication of previous modifications
 
