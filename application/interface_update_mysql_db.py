@@ -1,4 +1,4 @@
-from functions import *
+from functions.database_update import *
 import wx
 
 class UpdateDBInterface(wx.Frame):
@@ -184,7 +184,7 @@ class UpdateDBInterface(wx.Frame):
                 dial.ShowModal()
 
     def on_press(self, event):
-        wx.CallAfter(self.updateDB())
+        self.updateDB()
 
 
 

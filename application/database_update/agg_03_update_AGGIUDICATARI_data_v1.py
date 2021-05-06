@@ -1,4 +1,4 @@
-from functions import *
+from functions.functions import *
 
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
