@@ -1,0 +1,10 @@
+paths = dict(
+    backup_dir_path = "db_bdt_project_backup",
+)
+
+mysql_credentials = dict(
+    host = "127.0.0.1",
+    database = "db_bdt_project",
+    user = "root",
+    password = "dany1998",
+)

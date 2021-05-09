@@ -1,10 +1,15 @@
-# IMPORT LIBRARIES
+# necessary to import other modules
+import sys
+sys.path.append('../')
+
 import pandas as pd
 import numpy as np
 
 import mysql.connector
 from sqlalchemy import create_engine
+import wx
 
+from functions.utilities import *
 
 """
 FUNCTIONS FOR MYSQL [sqlalchemy]
@@ -133,7 +138,7 @@ Input:
     > table_name: name of the table in which the information will be added
     > cols_list: list of columns present in both the df and the table
 """
-def insertDataInTable(df, cursor, table_name, cols_list):
+def insertDataInTable(df, cursor, table_name, cols_list, interface = False):
 
     # Get the names of all the columns (in string format for MySQL)
     cols_names = "("
@@ -158,16 +163,28 @@ def insertDataInTable(df, cursor, table_name, cols_list):
 
     try:
 
+        already_displayed = []
         for i, row in df.reset_index().iterrows():
 
-            completion_perc = str(round(((i+1) / total_rows) * 100, 2))
-            print("\r> Inserting rows: " + str(i+1) + "/" + str(total_rows) + " [" + completion_perc + "%]", end="")
+            if interface:
+                completion_perc = int( ((i+1) / total_rows) * 100)
+                if completion_perc % 5 == 0 and completion_perc not in already_displayed:
+                    print("   - Completion: " + str(completion_perc) + "%")
+                    already_displayed.append(completion_perc)
+            else:
+                completion_perc = str(round(((i+1) / total_rows) * 100, 2))
+                print("\r> Inserting rows: " + str(i+1) + "/" + str(total_rows) + " [" + completion_perc + "%]", end="")
 
             query_list = []
             for col in cols_list:
                 query_list.append(row[col])
 
             cursor.execute(query, tuple(query_list))
+
+            # send the information to the console (prevent freezing)
+            if interface:
+                refreshGUI()
+
         
     except Exception as e:
         print("\n> ERROR: cannot add the row to the database. Error details below.\n" + str(e))
@@ -186,3 +203,4 @@ def closeMySQLConnection(cursor, connection):
     cursor.close()
     connection.close()
     #print("> MySQL connection closed successfully")
+

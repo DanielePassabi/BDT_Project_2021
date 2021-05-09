@@ -87,10 +87,34 @@ Per quanto riguarda il dataset **AGGIUDICATARI**
 
 [ ] Capire che architettura ML utilizzare per poter usare al meglio tutte le features.
 
-[ ] Imparare a creare un'interfaccia grafica per l'applicazione.
+[X] Imparare a creare un'interfaccia grafica per l'applicazione.
 
 [ ] Creare un docker ?
 
 [ ] Possibilità di backup.
 
 [ ] Report.
+
+### COSE DA FARE
+
+[X] refactoring database population
+[X] refactoring database update
+[X] provare a implementare la barra di progresso
+[X] impostare la struttura del paper (tecnico)
+[X] sistema di backup per MySQL
+  - tutte le informazioni sono sempre disponibili online
+  - meglio comunque avere un backup del db MySQL e dei dataset puliti (che in caso di errori si possono pushare nuovamente)
+
+[] provare soluzioni ML 
+   --> https://towardsdatascience.com/how-to-tackle-any-classification-problem-end-to-end-choose-the-right-classification-ml-algorithm-4d0becc6a295
+
+   --> https://medium.com/@b.terryjack/tips-and-tricks-for-multi-class-classification-c184ae1c8ffc
+[] interfaccina per soluzione ML
+
+Task per raggiungere la perfezione:
+[] aggiungere pulsante su interfaccia per fare backup dopo update
+[] fare interfaccia per popolazione iniziale del db
+
+Task semplici:
+[] alla fine di tutto, correggere i path (da test a ufficiale)
+[] Please make sure to give us access to the code! Git should also include a well-done readme and sufficient documentation for an external user to use and/or enhance the code. 

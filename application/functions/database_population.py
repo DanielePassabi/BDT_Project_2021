@@ -37,7 +37,10 @@ def cleanAggiudicatari(agg_path, save_path, final_csv_name):
 # This code is meant to be executed once
 # It exports the clean .csv with all the AGGIUDICATARI data to a MySQL DB
 """
-def exportAggiudicatariToMySQL(agg_path, host, port, database, user, password, table_name, cols_list):
+def exportAggiudicatariToMySQL(agg_path, host, port, database, user, password):
+
+    agg_table_name = "elenco_aggiudicatari_test"
+    agg_cols_list = ["cig", "aggiudicatario", "tipo_aggiudicatario"]
 
     # Final AGGIUDICATARI .csv data import
     print("\n> Importing the data from the AGGIUDICATARI .csv")
@@ -49,8 +52,8 @@ def exportAggiudicatariToMySQL(agg_path, host, port, database, user, password, t
     cursor = createCursor(connection)
 
     # Execute the query
-    print("\n> Inserting data into", table_name)
-    insertDataInTable(df, cursor, table_name, cols_list)
+    print("\n> Inserting data into", agg_table_name)
+    insertDataInTable(df, cursor, agg_table_name, agg_cols_list)
     print("> BD correctly updated")
 
     # Close the connection
@@ -96,7 +99,10 @@ def cleanCIG(cig_path, agg_path, save_path, final_csv_name):
 # This code is meant to be executed once
 # It exports the clean .csv with all the CIG join AGGIUDICATARI data to a MySQL DB
 """
-def exportCIGAggiudicatariToMySQL(agg_cig_csv_path, host, port, database, user, password, table_name, cols_list):
+def exportCIGAggiudicatariToMySQL(agg_cig_csv_path, host, port, database, user, password):
+
+    agg_cig_table_name = "appalti_aggiudicatari_test"
+    agg_cig_cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
 
     # Dataset import
     print("\n> Importing the data from the CIG_AGGIUDICATARI .csv")
@@ -108,7 +114,7 @@ def exportCIGAggiudicatariToMySQL(agg_cig_csv_path, host, port, database, user, 
     cursor = createCursor(connection)
 
     # Execute the query
-    insertDataInTable(df, cursor, table_name, cols_list)
+    insertDataInTable(df, cursor, agg_cig_table_name, agg_cig_cols_list)
 
     # Close the connection
     closeMySQLConnection(cursor, connection)

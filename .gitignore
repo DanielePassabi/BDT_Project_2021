@@ -15,3 +15,6 @@ application/datasets/various_data/aggiudicazioni_csv_0.csv
 application/datasets/various_data/pubblicazioni_csv_0.csv
 application/datasets/clean_data/aggiudicatari.csv
 *.csv
+application/database_backup/db_bdt_project_backup/20210509-153131/db_bdt_project.sql
+application/database_backup/db_bdt_project_backup/20210509-153228/db_bdt_project.sql
+application/database_backup/db_bdt_project_backup/20210509-155837/db_bdt_project.sql

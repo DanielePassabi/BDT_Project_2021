@@ -8,6 +8,7 @@ import time
 from os import listdir
 from os.path import isfile, join
 from tqdm import tqdm
+import wx
 
 
 """
@@ -180,3 +181,10 @@ def from_seconds_to_elapsed_time(seconds):
     seconds %= 60
       
     return "%d:%02d:%02d" % (hour, minutes, seconds)
+
+
+"""
+Allows the GUI to refresh/process inputs
+"""
+def refreshGUI():
+    wx.Yield()

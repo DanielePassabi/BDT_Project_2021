@@ -27,7 +27,7 @@ def train_KNN_model(df, K):
         lotti_data.append([df["importo_complessivo_gara"][i], df["n_lotti_componenti"][i], df["importo_lotto"][i]])
 
     # get the data about *aggiudicatari*
-    lotti_target = df["aggiudicatario"]
+    lotti_target = list(df["aggiudicatario"])
 
     # train the knn model
     X, y = lotti_data, lotti_target
@@ -48,4 +48,18 @@ Input:
 Output: prediction
 """
 def get_new_KNN_pred(KNN_model, importo_complessivo_gara, n_lotti_componenti, importo_lotto):
-    return knn.predict([[importo_complessivo_gara, n_lotti_componenti, importo_lotto]])
+    return KNN_model.predict([[importo_complessivo_gara, n_lotti_componenti, importo_lotto]])
+
+
+"""
+
+"""
+def prepareInputForKNN(df):
+    lotti_data = []
+    for i in range(len(test_df)):
+        lotti_data.append([test_df["importo_complessivo_gara"][i], test_df["n_lotti_componenti"][i], test_df["importo_lotto"][i]])
+
+    # get the data about *aggiudicatari*
+    lotti_target = list(test_df["aggiudicatario"])
+
+    return [lotti_data,lotti_target]
