@@ -73,28 +73,6 @@ Per quanto riguarda il dataset **AGGIUDICATARI**
 
 ---
 
-## *Cosa fare ora?*
-
-[X] Che dati ci sono, come sono fatti, cosa ce ne dobbiamo fare?
-
-[X] Sistema ad alto livello: capire l'utente cosa vede e cosa fa. --> Interfaccia grafica
-
-[X] Chiedere al prof come fare l'update su MySQL della table ELENCO_AGGIUDICATARI
-
-  - non vengono forniti nuovi .csv, ma lo stesso viene aggiornato
-
-[X] Finire script cig_03 (update CIG join AGGIUDICATARI con nuovi dati del mese)
-
-[ ] Capire che architettura ML utilizzare per poter usare al meglio tutte le features.
-
-[X] Imparare a creare un'interfaccia grafica per l'applicazione.
-
-[ ] Creare un docker ?
-
-[ ] Possibilità di backup.
-
-[ ] Report.
-
 ### COSE DA FARE
 
 [X] refactoring database population
