@@ -83,11 +83,22 @@ Per quanto riguarda il dataset **AGGIUDICATARI**
   - tutte le informazioni sono sempre disponibili online
   - meglio comunque avere un backup del db MySQL e dei dataset puliti (che in caso di errori si possono pushare nuovamente)
 
-[] provare soluzioni ML 
+[X] provare soluzioni ML 
    --> https://towardsdatascience.com/how-to-tackle-any-classification-problem-end-to-end-choose-the-right-classification-ml-algorithm-4d0becc6a295
 
    --> https://medium.com/@b.terryjack/tips-and-tricks-for-multi-class-classification-c184ae1c8ffc
-[] interfaccina per soluzione ML
+[X] interfaccina per soluzione ML
+
+Task a cui dovevamo pensare prima
+[] Pulizia dataset
+  - in `sezione_regionale` rimuovere la parola "SEZIONE_REGIONALE" da tutte le entry
+  - in `modalita_realizzazione` eliminare TUTTI gli apostrofi '
+  - in `denominazione_amministrazione_appaltante` 
+    - rimuovere tutti i simboli (ma non i numeri)
+    - rimuovere gli spazi iniziali a prescindere
+    - rimuovere più di 1 spazio consecutivo 
+  - in `descrizione_cpv` rimuovere i simboli (ma non i numeri)
+  - in `tipo_aggiudicatario` rimuovere SOLO gli apostrofi
 
 Task per raggiungere la perfezione:
 [] aggiungere pulsante su interfaccia per fare backup dopo update

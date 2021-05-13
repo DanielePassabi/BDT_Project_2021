@@ -3,10 +3,14 @@ import sys
 sys.path.append('../')
 
 from functions.machine_learning_model import *
-from config import *
+from config.model_info import *
 
+import json
 import pickle
 import wx
+
+with open('config/input_possible_choices.json') as f:
+  input_possible_choices = json.load(f)
 
 class PredictWinnerInterface(wx.Frame):
 
@@ -16,19 +20,9 @@ class PredictWinnerInterface(wx.Frame):
     
     def __init__(self, *args, **kwargs):
         super(PredictWinnerInterface, self).__init__(*args, **kwargs) 
-            
-        # Initialize variables (and placeholders)
-        self.combobox_data_type = None
-        self.csv_picker = None
-        self.textControl_host = None
-        self.textControl_port = None
-        self.textControl_database = None
-        self.textControl_user = None
 
-        self.textControl_password = None
-        self.log = None
-
-        self.percent = None
+        self.custom_size_mandatory = (200, 20)
+        self.custom_size_not_mandatory = (300, 20)
 
         self.InitUI()
 
@@ -37,7 +31,7 @@ class PredictWinnerInterface(wx.Frame):
 
         self.InitMainPanel()
 
-        self.SetSize((370, 715))
+        self.SetSize((510, 470))
         self.SetTitle('Predict Winner of Future Tender')
         self.Center()
         self.Show(True)
@@ -56,63 +50,78 @@ class PredictWinnerInterface(wx.Frame):
 
         # add button box
         button_box = wx.BoxSizer(wx.HORIZONTAL)
-        update_button = wx.Button(panel, label='Update DB', size=(100, 40))
+        update_button = wx.Button(panel, label='Get Prediction', size=(100, 40))
         button_box.Add(update_button, flag=wx.RIGHT)
         update_button.Bind(wx.EVT_BUTTON, self.on_press)
         vbox.Add(button_box, flag=wx.ALIGN_CENTER|wx.BOTTOM, border=20)
-
-        self.log = wx.TextCtrl(panel, -1, size=(300, 300), style=wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
-        vbox.Add(self.log, 0, wx.ALL | wx.EXPAND, 5)
-        redir = RedirectText(self.log)
-        sys.stdout = redir
 
 
     def loadWidgets(self, panel):
 
         widgets = []
 
-        combobox_label_data_type = wx.StaticText(panel, label='Select data to update')
-        choices = ['CIG', 'AGGIUDICATARI']
-        self.combobox_data_type = wx.ComboBox(panel, choices=choices)
-        widgets.append(combobox_label_data_type)
-        widgets.append(self.combobox_data_type)
+        text_control_label_total_value = wx.StaticText(panel, label='Total Tender Value [€]')
+        self.textControl_total_value = wx.TextCtrl(panel, size=self.custom_size_mandatory)
+        widgets.append(text_control_label_total_value)
+        widgets.append(self.textControl_total_value)
 
-        csv_picker_text = wx.StaticText(panel, label='Select .csv')
-        self.csv_picker = wx.FilePickerCtrl(panel)
+        text_control_label_lot = wx.StaticText(panel, label='Number of Lots in Tender')
+        self.textControl_lot = wx.TextCtrl(panel, size=self.custom_size_mandatory)
+        widgets.append(text_control_label_lot)
+        widgets.append(self.textControl_lot)
 
-        widgets.append(csv_picker_text)
-        widgets.append(self.csv_picker)
+        text_control_label_lot_value = wx.StaticText(panel, label='Lot Value')
+        self.textControl_lot_value = wx.TextCtrl(panel, size=self.custom_size_mandatory)
+        widgets.append(text_control_label_lot_value)
+        widgets.append(self.textControl_lot_value)
 
+        # create one empty row
+        text_control_pad_1 = wx.StaticText(panel, label='')
+        widgets.append(text_control_pad_1)
+        text_control_pad_2 = wx.StaticText(panel, label='')
+        widgets.append(text_control_pad_2)
 
-        text_control_mysql = wx.StaticText(panel, label='\nMySQL credentials')
-        text_control_mysql_padding = wx.StaticText(panel, label='')
-        widgets.append(text_control_mysql)
-        widgets.append(text_control_mysql_padding)
+        combobox_label_reg_branch = wx.StaticText(panel, label='Regional Branch')
+        choices = input_possible_choices["sezione_regionale"]
+        self.combobox_reg_branch = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_reg_branch)
+        widgets.append(self.combobox_reg_branch)
 
-        text_control_label_host = wx.StaticText(panel, label='Host')
-        self.textControl_host = wx.TextCtrl(panel)
-        widgets.append(text_control_label_host)
-        widgets.append(self.textControl_host)
+        combobox_label_field = wx.StaticText(panel, label='Field')
+        choices = input_possible_choices["settore"]
+        self.combobox_field = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_field)
+        widgets.append(self.combobox_field)
 
-        text_control_label_port = wx.StaticText(panel, label='Port')
-        self.textControl_port = wx.TextCtrl(panel)
-        widgets.append(text_control_label_port)
-        widgets.append(self.textControl_port)
+        combobox_label_partner_choice_crit = wx.StaticText(panel, label='Partner Choice Criterion')
+        choices = input_possible_choices["tipo_scelta_contraente"]
+        self.combobox_partner_choice_crit = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_partner_choice_crit)
+        widgets.append(self.combobox_partner_choice_crit)
 
-        text_control_label_database = wx.StaticText(panel, label='Database')
-        self.textControl_database = wx.TextCtrl(panel)
-        widgets.append(text_control_label_database)
-        widgets.append(self.textControl_database)
+        combobox_label_tender_modality = wx.StaticText(panel, label='Tender Modality')
+        choices = input_possible_choices["modalita_realizzazione"]
+        self.combobox_tender_modality = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_tender_modality)
+        widgets.append(self.combobox_tender_modality)
 
-        text_control_label_user = wx.StaticText(panel, label='User')
-        self.textControl_user = wx.TextCtrl(panel)
-        widgets.append(text_control_label_user)
-        widgets.append(self.textControl_user)
+        combobox_label_contracting_auth = wx.StaticText(panel, label='Contracting Authority')
+        choices = input_possible_choices["denominazione_amministrazione_appaltante"]
+        self.combobox_contracting_auth = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_contracting_auth)
+        widgets.append(self.combobox_contracting_auth)
 
-        text_control_label_password = wx.StaticText(panel, label='Password')
-        self.textControl_password = wx.TextCtrl(panel, style=wx.TE_PASSWORD)
-        widgets.append(text_control_label_password)
-        widgets.append(self.textControl_password)
+        combobox_label_cpv = wx.StaticText(panel, label='CPV')
+        choices = input_possible_choices["descrizione_cpv"]
+        self.combobox_cpv = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_cpv)
+        widgets.append(self.combobox_cpv)
+
+        combobox_label_tend_denom = wx.StaticText(panel, label='Tenderer Denomination')
+        choices = input_possible_choices["tipo_aggiudicatario"]
+        self.combobox_tend_denom = wx.ComboBox(panel, choices=choices, size=self.custom_size_not_mandatory)
+        widgets.append(combobox_label_tend_denom)
+        widgets.append(self.combobox_tend_denom)
 
         return widgets
 
@@ -122,84 +131,54 @@ class PredictWinnerInterface(wx.Frame):
     """
 
     """
-    Main function to update the Database
-     1. obtains the path of the csv to add to the db
-     2. obtains the credentials for MySQL DB (uses placeholders if not provided)
-     3. checks that all the data was provided by the user
-     4. updates the db with the provided data 
+    Main function to compute the prediction
     """
-    def updateDB(self):
-        data_to_update = self.combobox_data_type.GetStringSelection()
+    def getPrediction(self):
+        
+        # ottenere tutti i valori passati dall'utente
+        # ammessi valori in bianco (ma non nei primi 3!)
 
-        csv_path = self.csv_picker.GetPath()
+        importo_complessivo_gara = self.textControl_total_value.GetValue()
+        n_lotti_componenti = self.textControl_lot.GetValue()
+        importo_lotto = self.textControl_lot_value.GetValue()
 
-        if self.textControl_host.GetValue():
-            host = self.textControl_host.GetValue()
-
-        if self.textControl_port.GetValue():
-            port = self.textControl_port.GetValue()
-
-        if self.textControl_database.GetValue():
-            database = self.textControl_database.GetValue()
-
-        if self.textControl_user.GetValue():
-            user = self.textControl_user.GetValue()
-
-        password = self.textControl_password.GetValue()
+        sezione_regionale = self.combobox_reg_branch.GetStringSelection()
+        settore = self.combobox_field.GetStringSelection()
+        tipo_scelta_contraente = self.combobox_partner_choice_crit.GetStringSelection()
+        modalita_realizzazione = self.combobox_tender_modality.GetStringSelection()
+        denominazione_amministrazione_appaltante = self.combobox_contracting_auth.GetStringSelection()
+        descrizione_cpv = self.combobox_cpv.GetStringSelection()
+        tipo_aggiudicatario = self.combobox_tend_denom.GetStringSelection()
 
         # Check that all data is provided
         all_data = True
 
-        for elem in [data_to_update, csv_path, host, port, database, user, password]:
+        for elem in [importo_complessivo_gara, n_lotti_componenti, importo_lotto]:
             if not elem:
                 print("Error: you must provide all the information")
-                dial = wx.MessageDialog(None, "You must provide all the information", "Error", wx.ICON_EXCLAMATION)
+                dial = wx.MessageDialog(None, "Total Tender Value, Number of Lots in Tender and Lot Value are mandatory fields.\nPlease provide some values.", "Error", wx.ICON_EXCLAMATION)
                 dial.ShowModal()
                 all_data = False
                 break
-            
+
         if all_data:
-            print("\n========================================\n")
-            # Show provided data
-            print("INFORMATION PROVIDED")
-            print("\n > Data to update:", data_to_update)
-            print("\n > Path of chosen .csv:", csv_path)
-            print("\n > MySQL Credentials:")
-            print("   - host:", host)
-            print("   - port:", port)
-            print("   - database:", database)
-            print("   - user:", user)
+            # Load model and encoder
+            KNeighborsClassifier_model = pickle.load(open(model_info["model_path"], 'rb'))
+            KNeighborsClassifier_encoder = pickle.load(open(model_info["encod_path"], 'rb'))
+            
+            # Prepare list with input data
+            input_data = [importo_complessivo_gara, n_lotti_componenti, importo_lotto, settore, tipo_scelta_contraente, modalita_realizzazione, denominazione_amministrazione_appaltante, sezione_regionale, descrizione_cpv, tipo_aggiudicatario]
 
-            print("\nStarting the update")
+            # Return prediction
+            pred = get_pred(KNeighborsClassifier_model, KNeighborsClassifier_encoder, input_data)
+            
+            dial = wx.MessageDialog(None, "Predicted Winner: " + pred, "Results", wx.ICON_INFORMATION)
+            dial.ShowModal()
 
-            try:
-                if data_to_update == "CIG":
-                    updateCIGTable(host, port, database, user, password, csv_path, interface=True)
-
-                elif data_to_update == "AGGIUDICATARI":
-                    updateAggiudicatariTable(host, port, database, user, password, csv_path, interface=True)
-
-                dial = wx.MessageDialog(None, "Database correctly updated", "Information", wx.ICON_INFORMATION)
-                dial.ShowModal()
-
-                    
-            except Exception as e:
-                print("Error: Update Failed. Error details below.\n" + str(e))
-                dial = wx.MessageDialog(None, "Update Failed. Error details below.\n" + str(e), "Error", wx.ICON_ERROR)
-                dial.ShowModal()
 
     # on button press
     def on_press(self, event):
-        self.updateDB()
-
-
-
-class RedirectText(object):
-    def __init__(self,aWxTextCtrl):
-        self.out = aWxTextCtrl
-
-    def write(self,string):
-        self.out.WriteText(string)
+        self.getPrediction()
 
 
 def main():
@@ -209,7 +188,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-

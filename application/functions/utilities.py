@@ -188,3 +188,16 @@ Allows the GUI to refresh/process inputs
 """
 def refreshGUI():
     wx.Yield()
+
+
+"""
+Given a dataframe and a list of columns, 
+it returns the dictionary with the unique list of values present in each column
+"""
+def createDictPossibleChoicesForPrediction(df, cols_list):
+    sol_dict = {}
+    for c in cols_list:
+        unique_values = list(set(df[c]))
+        unique_values.sort()
+        sol_dict[c] = unique_values
+    return sol_dict
