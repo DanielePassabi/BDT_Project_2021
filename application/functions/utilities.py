@@ -1,11 +1,7 @@
 # IMPORT LIBRARIES
 import pandas as pd
-import numpy as np
-
-import sys
-import time
-
-from os import listdir, replace
+import re
+from os import listdir
 from os.path import isfile, join
 from tqdm import tqdm
 import wx
@@ -77,8 +73,48 @@ def cleanCIG(cig_df):
     # Operation 2 - Remove all rows with at least 1 NAs
     cig_df = cig_df.dropna()
 
+    # Operation 3 - Clean the columns
+
+    # A - Remove the words SEZIONE REGIONALE (present in each entry) from sezione_regionale
+    cig_df["sezione_regionale"] = cig_df["sezione_regionale"].apply(lambda x: x.replace("SEZIONE REGIONALE", ""))
+
+    # B - Select the cols to clean and clean them
+    cols_to_clean = ["settore", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv"]
+
+    for col in cols_to_clean:
+        cig_df[col] = cig_df[col].apply(lambda x: removeInconsistenciesFromString(x))
+
+    # C - Custom clean for column modalita_realizzazione
+    cig_df["modalita_realizzazione"] = cig_df["modalita_realizzazione"].apply(lambda x: x.replace("DAPPALTO", "D APPALTO"))
+
+    # D - Custom clean for column denominazione_amministrazione_appaltante
+    cig_df["denominazione_amministrazione_appaltante"] = cig_df["denominazione_amministrazione_appaltante"].apply(lambda x: x.replace("S P A", "SPA"))
+    cig_df["denominazione_amministrazione_appaltante"] = cig_df["denominazione_amministrazione_appaltante"].apply(lambda x: x.replace("S R L", "SRL"))
+
     # Return clean df
     return cig_df
+
+
+"""
+Given a string, it:
+    > removes all the symbols (but not the numbers)
+    > removes more than one consecutive space char
+    > removes the spaces from the start and the end of the string
+
+Input: string
+Output: cleaned string
+"""
+def removeInconsistenciesFromString(string):
+
+    # remove all symbols (but not numbers)
+    string = re.sub(r'[^\w]', ' ', string)
+
+    # remove more than one consecutive space char
+    string = re.sub(' +', ' ', string)
+
+    # remove the spaces from the start and the end of the string
+    string = string.strip(" ")
+    return string
 
 
 """
@@ -147,7 +183,7 @@ def cleanAggiudicatari(agg_df):
     agg_df = agg_df.dropna()
 
     # Operation 4 - Remove all ' for consistencies
-    agg_df['tipo_aggiudicatario'] = agg_df['tipo_aggiudicatario'].apply(replace("'", ""))
+    agg_df["tipo_aggiudicatario"] = agg_df["tipo_aggiudicatario"].apply(lambda x: x.replace("'", ""))
 
     # Return clean df
     return agg_df

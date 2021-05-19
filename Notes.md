@@ -1,119 +1,103 @@
-# Storico Lavoro
+# Notes
 
-## 21 Aprile 2021
+## *Storico Lavoro*
 
 - Esplorazione dei dati, volta a comprendere i dataset con cui dovremo lavorare
-- Creazione dataset pulito e completo del 2020 per primi test
-- Creazione cartella `application`, che conterrà la soluzione finale
-- Creazione script `functions.py`, con funzioni per creare un modello basato su KNN in grado di predire il più probabile vincitore dell'asta
-
----
-
-## 25 Aprile 2021
-
-- Ottenimento di tutti i dataset CIG
-- Creazione di funzioni per importare, pulire ed aggregare i dataset
-- Aggiunta del dataset completo e pulito degli *aggiudicatari* al database MySQL
-- Aggiunta del dataset completo e pulito di *CIG* join *aggiudicatari* al database MySQL
-- Valutazione nuove features a partire dai dati `aggiudicazioni.csv`
+- Analisi più approfondita dei dati attraverso l'uso di KNIME
+- Creazione di pipeline per puliza dei dati attraverso KNIME
+- Studio di quali tecnologie è consono usare per risolvere al meglio il task del progetto
+- Primi test con database MySQL
+  - utilizzo di MySQL Workbench
+  - connessione a MySQL DB attraverso Python
+  - studio approfondito dei vari *data types*
+  - test efficienza per creazione database
+  - test efficienza per update database
+  - creazione script per creazione, update e backup del database
+  - creazione applicazione per update più veloce del database
+- Studio di architetture Machine Learning (e non) per la risoluzione del task
+- Implementazione e test di varie architetture 
+- Creazione applicazione finale, basata sull'architettura scelta
 
 ---
 
 ## *Dati*
 
-- Quelli di ANAC sono fatti molto bene.
-
-- Il prof ha parlato di CSV da 5 milioni di righe.
-
-[Link alla descrizione del dataset](https://dati.anticorruzione.it/opendata#HIDE1)
-
-[Link ai dataset](https://dati.anticorruzione.it/opendata/dataset?page=1)
+- I dati forniti da *ANAC* sono consistenti e ben fatti.
+- [Link](https://dati.anticorruzione.it/opendata#HIDE1) alla descrizione del dataset.
+- [Link](https://dati.anticorruzione.it/opendata/dataset?page=1) per download dei dataset.
 
 ---
 
 ## *Cose da ricordare*
 
-<br>
+### *Generali*
 
-Generali
+- È più facile che in certe zone vincano sempre le stesse aziende (ci sono vincitori storici), quindi utilizzare informazioni rigurdanti il luogo nel modello.
+- Per quanto riguarda il dataset **Bando CIG**
+  - La colonna `stato` non fornisce alcuna informazione utile. Si può dunque rimuovere (o non utilizzare per il modello ML)
+  - Le colonne `luogo_istat` e `provincia` contengono per la maggior parte valori nulli. Non ci sono utili.
+  - La colonne `codice_ausa` (che identifica univocamente `cf_amministrazione_appaltante` e `denominazione_amministrazione_appaltante`) presenta valori nulli. Non possiamo usarla, meglio usare direttamente il nome (`denominazione_amministrazione_appaltante`).
+- Per quanto riguarda il dataset **AGGIUDICATARI**
+  - *Mandante*: colui che da
+  - *Mandatario*: chi si obbliga a compiere un'azione per conto del mandante
 
-- È più facile che in certe zone vincano sempre le stesse aziende (ci sono vincitori storici)
-
-<br>
-
-Per quanto riguarda il dataset **Bando CIG**
-
-- La colonna `stato` non fornisce alcuna informazione utile. Si può dunque rimuovere (o non utilizzare per il modello ML)
-
-- Le colonne `luogo_istat` e `provincia` contengono per la maggior parte valori nulli. Non ci sono utili.
-
-- La colonne `codice_ausa` (che identifica univocamente `cf_amministrazione_appaltante` e `denominazione_amministrazione_appaltante`) presenta valori nulli. Non possiamo usarla, meglio usare direttamente il nome (`denominazione_amministrazione_appaltante`).
-
-<br>
-
-Per quanto riguarda il dataset **AGGIUDICATARI**
-
-- *Mandante*: colui che da
-
-- *Mandatario*: chi si obbliga a compiere un'azione per conto del mandante
-
----
-
-## *Consigli Professore*
+### *Consigli Professore*
 
 - A chi è indirizzata?
 
-  R: ad un ente economico che ha intenzione di partecipare alla gara di appalto.
+  **R**: ad un ente economico che ha intenzione di partecipare alla gara di appalto.
 
 - Qual è il fine?
 
-  R: vedere la probabilità che date le sue caratteristiche/potenzialità il dato ente economico vinca il bando.
+  **R**: vedere la probabilità che date le sue caratteristiche/potenzialità il dato ente economico vinca il bando.
 
 - Cosa vede ed usa l'utente? Un applicativo web? Un bot di Telegram? Un'applicazione? Come si usa?
-- Specificare per diversi tipi di bando. Per esempio: trasporti, edilizia scolastica, infrastrutture pubbliche (strade, ecc), servizi pubblici (monnezza, pulizia ospedali).
-- Specificare per diverse regioni e/o città?
+
+  **R**: un'applicazione.
+
+- Specificare per diversi tipi di bando. Per esempio: trasporti, edilizia scolastica, infrastrutture pubbliche (strade, ecc), servizi pubblici (monnezza, pulizia ospedali). Specificare anche per diverse regioni e/o città?
+
+  Riusciamo ad addestrare il modello in base ai parametri proposti.
 
 ---
 
-### COSE DA FARE
+## *Cose da fare*
 
 [X] refactoring database population
+
 [X] refactoring database update
+
 [X] provare a implementare la barra di progresso
+
 [X] impostare la struttura del paper (tecnico)
+
 [X] sistema di backup per MySQL
 
-- tutte le informazioni sono sempre disponibili online
-- meglio comunque avere un backup del db MySQL e dei dataset puliti (che in caso di errori si possono pushare nuovamente)
-
 [X] provare soluzioni ML
-   --> <https://towardsdatascience.com/how-to-tackle-any-classification-problem-end-to-end-choose-the-right-classification-ml-algorithm-4d0becc6a295>
 
-   --> <https://medium.com/@b.terryjack/tips-and-tricks-for-multi-class-classification-c184ae1c8ffc>
+- [Link](https://towardsdatascience.com/how-to-tackle-any-classification-problem-end-to-end-choose-the-right-classification-ml-algorithm-4d0becc6a295) utile per problemi di classificazione
+- [Link](https://medium.com/@b.terryjack/tips-and-tricks-for-multi-class-classification-c184ae1c8ffc) utile per multi-class classification
+
 [X] interfaccina per soluzione ML
 
-Task a cui dovevamo pensare prima:
+[X] Pulizia dataset in seguito a nuove inconsistenze
 
-[] Pulizia dataset
+[X] Per MySQL studiare in modo più approfondito il tipo delle colonne
 
-- in `sezione_regionale` rimuovere la parola "SEZIONE_REGIONALE" da tutte le entry
-- in `modalita_realizzazione` eliminare TUTTI gli apostrofi '
-- in `denominazione_amministrazione_appaltante`
-  - rimuovere tutti i simboli (ma non i numeri)
-  - rimuovere gli spazi iniziali a prescindere
-  - rimuovere più di 1 spazio consecutivo
-- in `descrizione_cpv` rimuovere i simboli (ma non i numeri)
+[] Aggiungere file `requirements.txt` per INTERO PROGETTO
 
-- in `tipo_aggiudicatario` rimuovere SOLO gli apostrofi [AGG]
+[] Rendere applicazione finale un `.exe`
 
-- Per MySQL studiare in modo più approfondito il tipo delle colonne
-- Aggiungere file requirements.txt per INTERO PROGETTO
-- Rendere applicazione finale un .exe
+[] Tradurre il `README.md`
 
-Task per raggiungere la perfezione:
+[] Informarsi su altre tecnologie da usare
+
+[] Controllare che i prof abbiamo accesso al codice (su Github)
+
+[] Alla fine di tutto, correggere i path (da test a ufficiale)
+
+## *Cose da fare (meno urgenti)*
 [] aggiungere pulsante su interfaccia per fare backup dopo update
+
 [] fare interfaccia per popolazione iniziale del db
 
-Task semplici:
-[] alla fine di tutto, correggere i path (da test a ufficiale)
-[] Please make sure to give us access to the code! Git should also include a well-done readme and sufficient documentation for an external user to use and/or enhance the code.
