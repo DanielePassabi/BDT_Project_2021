@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import time
 
-from os import listdir
+from os import listdir, replace
 from os.path import isfile, join
 from tqdm import tqdm
 import wx
@@ -145,6 +145,9 @@ def cleanAggiudicatari(agg_df):
 
     # Operation 3 - Remove all rows with at least 1 NAs
     agg_df = agg_df.dropna()
+
+    # Operation 4 - Remove all ' for consistencies
+    agg_df['tipo_aggiudicatario'] = agg_df['tipo_aggiudicatario'].apply(replace("'", ""))
 
     # Return clean df
     return agg_df

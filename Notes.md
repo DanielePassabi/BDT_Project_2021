@@ -42,6 +42,7 @@ Generali
 <br>
 
 Per quanto riguarda il dataset **Bando CIG**
+
 - La colonna `stato` non fornisce alcuna informazione utile. Si può dunque rimuovere (o non utilizzare per il modello ML)
 
 - Le colonne `luogo_istat` e `provincia` contengono per la maggior parte valori nulli. Non ci sono utili.
@@ -51,6 +52,7 @@ Per quanto riguarda il dataset **Bando CIG**
 <br>
 
 Per quanto riguarda il dataset **AGGIUDICATARI**
+
 - *Mandante*: colui che da
 
 - *Mandatario*: chi si obbliga a compiere un'azione per conto del mandante
@@ -80,25 +82,33 @@ Per quanto riguarda il dataset **AGGIUDICATARI**
 [X] provare a implementare la barra di progresso
 [X] impostare la struttura del paper (tecnico)
 [X] sistema di backup per MySQL
-  - tutte le informazioni sono sempre disponibili online
-  - meglio comunque avere un backup del db MySQL e dei dataset puliti (che in caso di errori si possono pushare nuovamente)
 
-[X] provare soluzioni ML 
-   --> https://towardsdatascience.com/how-to-tackle-any-classification-problem-end-to-end-choose-the-right-classification-ml-algorithm-4d0becc6a295
+- tutte le informazioni sono sempre disponibili online
+- meglio comunque avere un backup del db MySQL e dei dataset puliti (che in caso di errori si possono pushare nuovamente)
 
-   --> https://medium.com/@b.terryjack/tips-and-tricks-for-multi-class-classification-c184ae1c8ffc
+[X] provare soluzioni ML
+   --> <https://towardsdatascience.com/how-to-tackle-any-classification-problem-end-to-end-choose-the-right-classification-ml-algorithm-4d0becc6a295>
+
+   --> <https://medium.com/@b.terryjack/tips-and-tricks-for-multi-class-classification-c184ae1c8ffc>
 [X] interfaccina per soluzione ML
 
-Task a cui dovevamo pensare prima
+Task a cui dovevamo pensare prima:
+
 [] Pulizia dataset
-  - in `sezione_regionale` rimuovere la parola "SEZIONE_REGIONALE" da tutte le entry
-  - in `modalita_realizzazione` eliminare TUTTI gli apostrofi '
-  - in `denominazione_amministrazione_appaltante` 
-    - rimuovere tutti i simboli (ma non i numeri)
-    - rimuovere gli spazi iniziali a prescindere
-    - rimuovere più di 1 spazio consecutivo 
-  - in `descrizione_cpv` rimuovere i simboli (ma non i numeri)
-  - in `tipo_aggiudicatario` rimuovere SOLO gli apostrofi
+
+- in `sezione_regionale` rimuovere la parola "SEZIONE_REGIONALE" da tutte le entry
+- in `modalita_realizzazione` eliminare TUTTI gli apostrofi '
+- in `denominazione_amministrazione_appaltante`
+  - rimuovere tutti i simboli (ma non i numeri)
+  - rimuovere gli spazi iniziali a prescindere
+  - rimuovere più di 1 spazio consecutivo
+- in `descrizione_cpv` rimuovere i simboli (ma non i numeri)
+
+- in `tipo_aggiudicatario` rimuovere SOLO gli apostrofi [AGG]
+
+- Per MySQL studiare in modo più approfondito il tipo delle colonne
+- Aggiungere file requirements.txt per INTERO PROGETTO
+- Rendere applicazione finale un .exe
 
 Task per raggiungere la perfezione:
 [] aggiungere pulsante su interfaccia per fare backup dopo update
@@ -106,4 +116,4 @@ Task per raggiungere la perfezione:
 
 Task semplici:
 [] alla fine di tutto, correggere i path (da test a ufficiale)
-[] Please make sure to give us access to the code! Git should also include a well-done readme and sufficient documentation for an external user to use and/or enhance the code. 
+[] Please make sure to give us access to the code! Git should also include a well-done readme and sufficient documentation for an external user to use and/or enhance the code.
