@@ -6,44 +6,45 @@ Project of BDT - Giorgia Villa, Daniele Passabì
 
 ### *Description*
 
-La nostra applicazione fa questo e questo.
+This code provides a possible implementation of a Big Data System able to preform predictions on tenders published by the Italian administrative bodies. It returns the most likely winners of a tender specified by the end-user through a customised interface. Predictions are based on historical data and obtained through a machine learning model running a K-NearestNeighbour classification.
 
 ### *How to start (end user)*
 
-è semplicemente richiesto di eseguire il file exe, inserire le informazioni della propria azienda (e dell'asta) e cliccare il pulsante per ottenere la predizione della possibile azienda vincitrice.
+To the end-user it is simply required to run the respcetive file exe. This wil open a window were some company and tender information need to be specified. Once done this, it is enough to click on the *Get prediction* button and the prediction for the most likely tender winner will be displayed.
 
-### *How to start (developer)*
+### *How to start (developer) BLEAH* - DANI NO ME GUSTA, CI PENSO DOPO
 
-L'applicazione funziona in modo autonomo e presuppone di essere aggiornata mensilmente.
+The application runs autonomously after the execution of the proper exe file. Nevertheless, data have to be updated montlhy.
 
-- i dati delle aste vengono aggiornati mensilmente
-- vengono inseriti nel DB MySQL
-- viene riaddestrato il modello di predizione
-- viene aggiornata (e ripubblicata) l'applicazione
+- tenders data are updated monthly
+- they are uploaded in the MySQL database
+- the prediction model is trained also on the new data
+- the application is updatated and issued (?)
 
 ### *Python requirements*
 
-- si consiglia l'uso di Python versione X.Z
-- è presente un file `requirements.txt` con tutte le librerie necessarie al corretto funzionamento dell'applicazione
+- Suggested Python version: X.Z
+- Required libraries: the file `requirements.txt` contains all libraries to be installed for the application to run properly.
 
 ### *MySQL Requirements*
 
-- è necessario installare un'instanza di MySQL, come ad esempio [MySQL Workbench](https://www.mysql.com/it/products/workbench/).
-
-- è necessario creare due tabelle, con le seguenti caratteristiche:
+- It is necessary to install a MySQL instance, such as [MySQL Workbench](https://www.mysql.com/it/products/workbench/).
+- In the chosen MySQL instance two tables must be generated, as follows:
 
 <br/>
+Table 1
 
-Table `elenco_aggiudicatari`
+Table Name:  `elenco_aggiudicatari`
 | Column Name           | Column Type   |
 |-----------------------|---------------|
-| `cig`                 | inserire tipo |
-| `aggiudicatario`      | inserire tipo |
-| `tipo_aggiudicatario` | inserire tipo |
+| `cig`                 | CHAR(10)      |
+| `aggiudicatario`      | VARCHAR(128)  |
+| `tipo_aggiudicatario` | VARCHAR(256)  |
 
 <br/>
+Table 2
 
-Table `appalti_aggiudicatari`
+Table Name: `appalti_aggiudicatari`
 | Column Name                                 | Column Type   |
 |---------------------------------------------|---------------|
 | `cig`                                       | CHAR(10)      |
@@ -63,94 +64,94 @@ Table `appalti_aggiudicatari`
 
 <br/>
 
-Note sulle scelte effettuate: è stato effettuato uno studio basato sulla [Official Documentation](https://dev.mysql.com/doc/refman/8.0/en/floating-point-types.html) e sullo specifico tipo di variabili contenute nelle colonne. Abbiamo puntato a ridurre lo spazio richiesto al minimo, ma senza sacrificare la futura espandibilità dell'applicazione.
+Notes on column type choices: specific column types were chosen on the basis of the [Official Documentation](https://dev.mysql.com/doc/refman/8.0/en/floating-point-types.html) and on the specific type of variable present in each column. The aim was to minimize the required space, without preventing further developments of the application.
 
 ---
 
 ## Code Structure
 
-Segue la descrizione della struttura del codice del nostro progetto, con spiegazioni dettagliate.
+Below the detailed description of the code structure of this project.
 
 ### *Database population*
 
-Nella cartella `database_population` si trovano due file.
+In folder `database_population` there are two files.
 
-- Il primo, `config.py`, contiene le informazioni di configurazione necessarie per popolare il database per la prima volta. Queste comprendono:
-  - i path delle cartelle in cui vi sono i file .csv scaricati dal sito ufficiale dell'ANAC, reperibili a [questo](https://dati.anticorruzione.it/opendata/dataset?page=1) link.
-  - i dati del database MySQL in cui i dati (puliti) verranno caricati
+- `config.py`, with configuration settings necessary to populate the database for the first time. In details in contains:
+  - paths of folders of the csv files downloaded from ANAC official website, available at this [link](https://dati.anticorruzione.it/opendata/dataset?page=1).
+  - Data of the MySQL database in which the claned data will be stored/uploaded ?????? DANI CHEEEEE??????
 
-- Il secondo è lo script `populate_database.py`, che, a partire dai dataset *raw* in formato .csv:
-  - pulisce i dati degli aggiudicatari e li carica sul db mysql
-  - pulisce i dati degli appalti, esegue un join con i dati degli aggiudicatari e li carica sul db mysql
+- `populate_database.py` which:
+  - takes the datasets in the *raw* folder in .csv format;
+  - cleans aggiudicatari data and uploads them in the MySQL database;
+  - cleans tenders data, joins them with the aggiudicatari data and uploads the results in the MySQL database.
 
-Questa operazione è pensata per essere eseguita una volta sola. I dati verranno poi aggiornati attraverso l'applicazione presentata nella prossima sezione.
+This operation is thought to be performed only once. Data will be then updatated thorugh the application presented in the next pararagraph.
 
 ### *Database update*
 
 #### *Premise*
 
-ANAC fornisce i dati rigurdanti gli appalti (CIG) e gli aggiudicatari in modo diverso:
+ANAC provides data on tenders (CIG) and on winners (aggiudicatari) differently:
 
-- CIG: ogni mese viene rilasciato un nuovo .csv con i dati riguardanti le aste di quel mese.
-- Aggiudicatari: in lassi di tempo molto più lunghi viene aggiornato lo stesso grande file .csv con nuovi aggudicatari
+- CIG: every month a new .csv is relased with data related to tenders of that month.
+- Winners: seldom the same .csv file is updated with new winners (hence the file is getting larger and larger).
 
-Questo ha reso necessario operare in due diversi modi per aggiornare le tabelle presenti nel nostro database MySQL.
+For this reason two different procedures were implemented to update data on the MySQL database.
 
 #### *Solution*
 
-è possibile aggiornare il database in due modi: usando l'applicazione (consigliata) o i singoli script Python specifici per le tabelle presenti nel database.
+The MySQL database can be updated in two ways: through the application (suggested) o by running the Python scripts specifically for the tables in the database.
 
-#### *Applicazione*
+#### *Update though application*
 
-- Lanciabile attraverso lo script `update_database_interface.py`
+- The application for update can be run thorugh the script `update_database_interface.py`
 
-- Permette di selezionare il tipo di tabella che si vuole aggiornare (`elenco_aggiudicatari` | `appalti_aggiudicatari`)
+- It lets the user select which kind of tables to update (`elenco_aggiudicatari` | `appalti_aggiudicatari`)
 
-- Permette di selezionare il .csv contenente i raw data che si vogliono aggiungere al DB
+- It lets the user select the new .csv with raw data to be added to the MySQL database
 
-- Permette di inserire le proprie credenziali MySQL
+- It lets the user provide their onwn MySQL credentials
 
-- Una volta inserite le informazioni, è semplicemente necessario cliccare su *Update DB* per avviare il processo di aggiornamento dei dati.
+- Once all information have been provided, it is only necessary to click on the *Update DB* button to launch the updating procedure.
 
-- Seguono delle immagini esplicative
+- Below some pictures.
 
   TODO: INSERIRE IMMAGINE APPLICAZIONE
 
 #### *Script Python*
 
-è presente un file di configurazione `config.py`, nel quale è necessario inserire le informazioni riguardanti il database MySQL.
+First of all, it is necessary to provide credentials and settings for the MySQL database in the configuration file `config.py`.
 
-Segue una spiegazione del funzionamento degli script:
+Below a detailed explanation of the script and logic of the system:
 
 - `update_database_CIG`
-  - permette l'update della tabella `appalti_aggiudicatari`
-  - permette di selezionare un nuovo file .csv (raw) con nuovi dati riguardanti gli appalti
-  - i nuovi dati vengono puliti
-  - il database viene aggiornato
+  - enables to update the table `appalti_aggiudicatari`
+  - enables to select a new file .csv (raw) with new data concerning tenders
+  - cleans the new data
+  - updates the MySQL database
 
 - `update_database_aggiudicatari_v1`
-  - permette l'update della tabella `elenco_aggiudicatari`
-  - permette di selezionare un nuovo file .csv (raw) con nuovi dati riguardanti gli aggiudicatari
-  - rimuove i vecchi dati riguardanti gli aggiudicatari dal database MySQL
-  - aggiunge i nuovi dati
+  - enables to update the table `elenco_aggiudicatari`
+  - enables to select a new file .csv (raw) with new data concerning winners
+  - removes old data about winners from the MySQL database
+  - uploads the new data on the MySQL database
 
 - `update_database_aggiudicatari_v2`
-  - permette l'update della tabella `elenco_aggiudicatari`
-  - permette di selezionare un nuovo file .csv (raw) con nuovi dati riguardanti gli aggiudicatari
-  - confronta i dati già presenti nel db con i nuovi dati
-  - aggiorna il db aggiungendo solo i nuovi dati
+  - enables to update the table `elenco_aggiudicatari`
+  - enables to select a new file .csv (raw) with new data concerning winners
+  - compares the the new data with the ones already present in the MySQL database
+  - updates the MySQL database loading only records not already present in the database
 
-Note: `update_database_aggiudicatari_v1` è molto meno efficiente e veloce di `update_database_aggiudicatari_v2`. Viene lasciata come soluzione alternativa nel caso in cui il dataset dovesse essere troppo grande da non poter più essere contenuto (2 volte) in memoria, operazione necessaria per il confronto.
+Note: `update_database_aggiudicatari_v1` is way less efficient and faster than `update_database_aggiudicatari_v2`. It is left as an alternative solution in case the dataset is too large to be stored twice in memory (which is necessary for the comparison operation).
 
 ### *Database backup*
 
-Nella cartella `database_backup` è possibile eseguire un semplice script per la creazione di un backup del proprio database MySQL.
+In folder `database_backup` it is possible to run a script to generate a backup of the MySQL database.
 
-Anche qui è presente un file di configurazione `config.py`, in cui è possibile settare le proprie informazioni rigurdanti il database e la cartella in cui salvare il dump.
+In the `config.py`, it is possible to provide customized database settings and the forlder in which to save the dump.
 
-è consigliato eseguire periodicamente il dump dei file, possibilmente in cloud o su una macchina diversa da quella che ospita il database originale.
+It is suggested to periodically dump files, possibly in clouds or on a different machine from the one with the original database.
 
 ### *Final App: Predict Tander Winner*
 
-Qui sono presenti i file di configurazione e gli script su cui è basata l'applicazione finale.
-
+The final application is based on the following configuration files and scripts.
