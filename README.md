@@ -10,16 +10,16 @@ This code provides a possible implementation of a Big Data System able to prefor
 
 ### *How to start (end user)*
 
-To the end-user it is simply required to run the respcetive file exe. This wil open a window were some company and tender information need to be specified. Once done this, it is enough to click on the *Get prediction* button and the prediction for the most likely tender winner will be displayed.
+To the end-user it is simply required to run the respective file exe. This will open a window were some company and tender information need to be specified. Once done this, it is enough to click on the *Get prediction* button and the prediction for the most likely tender winner will be displayed.
 
 ### *How to start (developer) BLEAH* - DANI NO ME GUSTA, CI PENSO DOPO
 
-The application runs autonomously after the execution of the proper exe file. Nevertheless, data have to be updated montlhy.
+The application runs autonomously after the execution of the proper exe file. Nevertheless, data have to be updated monthly.
 
 - tenders data are updated monthly
 - they are uploaded in the MySQL database
 - the prediction model is trained also on the new data
-- the application is updatated and issued (?)
+- the application is updated and released to the user
 
 ### *Python requirements*
 
@@ -78,14 +78,14 @@ In folder `database_population` there are two files.
 
 - `config.py`, with configuration settings necessary to populate the database for the first time. In details in contains:
   - paths of folders of the csv files downloaded from ANAC official website, available at this [link](https://dati.anticorruzione.it/opendata/dataset?page=1).
-  - Data of the MySQL database in which the claned data will be stored/uploaded ?????? DANI CHEEEEE??????
+  - Credentials of the MySQL database in which the cleaned data will be stored
 
 - `populate_database.py` which:
   - takes the datasets in the *raw* folder in .csv format;
   - cleans aggiudicatari data and uploads them in the MySQL database;
   - cleans tenders data, joins them with the aggiudicatari data and uploads the results in the MySQL database.
 
-This operation is thought to be performed only once. Data will be then updatated thorugh the application presented in the next pararagraph.
+This operation is thought to be performed only once. Data will be then updated through the application presented in the next paragraph.
 
 ### *Database update*
 
@@ -93,7 +93,7 @@ This operation is thought to be performed only once. Data will be then updatated
 
 ANAC provides data on tenders (CIG) and on winners (aggiudicatari) differently:
 
-- CIG: every month a new .csv is relased with data related to tenders of that month.
+- CIG: every month a new .csv is released with data related to tenders of that month.
 - Winners: seldom the same .csv file is updated with new winners (hence the file is getting larger and larger).
 
 For this reason two different procedures were implemented to update data on the MySQL database.
@@ -104,13 +104,13 @@ The MySQL database can be updated in two ways: through the application (suggeste
 
 #### *Update though application*
 
-- The application for update can be run thorugh the script `update_database_interface.py`
+- The application for update can be run through the script `update_database_interface.py`
 
 - It lets the user select which kind of tables to update (`elenco_aggiudicatari` | `appalti_aggiudicatari`)
 
 - It lets the user select the new .csv with raw data to be added to the MySQL database
 
-- It lets the user provide their onwn MySQL credentials
+- It lets the user provide their own MySQL credentials
 
 - Once all information have been provided, it is only necessary to click on the *Update DB* button to launch the updating procedure.
 
@@ -148,10 +148,10 @@ Note: `update_database_aggiudicatari_v1` is way less efficient and faster than `
 
 In folder `database_backup` it is possible to run a script to generate a backup of the MySQL database.
 
-In the `config.py`, it is possible to provide customized database settings and the forlder in which to save the dump.
+In the `config.py`, it is possible to provide customized database settings and the folder in which to save the dump.
 
 It is suggested to periodically dump files, possibly in clouds or on a different machine from the one with the original database.
 
-### *Final App: Predict Tander Winner*
+### *Final App: Predict Tender Winner*
 
 The final application is based on the following configuration files and scripts.
