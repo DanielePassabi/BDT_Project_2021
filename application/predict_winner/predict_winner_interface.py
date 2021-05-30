@@ -33,6 +33,8 @@ class PredictWinnerInterface(wx.Frame):
 
         self.SetSize((510, 470))
         self.SetTitle('Predict Winner of Future Tender')
+        self.icon = wx.Icon("config/final_app_icon.ico", wx.BITMAP_TYPE_ICO)
+        self.SetIcon(self.icon)
         self.Center()
         self.Show(True)
 

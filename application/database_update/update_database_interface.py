@@ -5,8 +5,6 @@ sys.path.append('../')
 from functions.database_update import *
 import wx
 
-import time
-
 class UpdateDBInterface(wx.Frame):
 
     """
@@ -15,6 +13,8 @@ class UpdateDBInterface(wx.Frame):
     
     def __init__(self, *args, **kwargs):
         super(UpdateDBInterface, self).__init__(*args, **kwargs) 
+
+        self.custom_size = (120,20)
             
         # Initialize variables (and placeholders)
         self.combobox_data_type = None
@@ -41,8 +41,10 @@ class UpdateDBInterface(wx.Frame):
 
         self.InitMainPanel()
 
-        self.SetSize((370, 715))
+        self.SetSize((380, 715))
         self.SetTitle('Update MySQL DB')
+        self.icon = wx.Icon("database_update.ico", wx.BITMAP_TYPE_ICO)
+        self.SetIcon(self.icon)
         self.Center()
         self.Show(True)
 
@@ -77,12 +79,12 @@ class UpdateDBInterface(wx.Frame):
 
         combobox_label_data_type = wx.StaticText(panel, label='Select data to update')
         choices = ['CIG', 'AGGIUDICATARI']
-        self.combobox_data_type = wx.ComboBox(panel, choices=choices)
+        self.combobox_data_type = wx.ComboBox(panel, choices=choices, size=self.custom_size)
         widgets.append(combobox_label_data_type)
         widgets.append(self.combobox_data_type)
 
         csv_picker_text = wx.StaticText(panel, label='Select .csv')
-        self.csv_picker = wx.FilePickerCtrl(panel)
+        self.csv_picker = wx.FilePickerCtrl(panel, size=(120+80,22))
 
         widgets.append(csv_picker_text)
         widgets.append(self.csv_picker)
@@ -94,31 +96,31 @@ class UpdateDBInterface(wx.Frame):
         widgets.append(text_control_mysql_padding)
 
         text_control_label_host = wx.StaticText(panel, label='Host')
-        self.textControl_host = wx.TextCtrl(panel)
+        self.textControl_host = wx.TextCtrl(panel, size=self.custom_size)
         self.textControl_host.SetHint(self.hint_host)
         widgets.append(text_control_label_host)
         widgets.append(self.textControl_host)
 
         text_control_label_port = wx.StaticText(panel, label='Port')
-        self.textControl_port = wx.TextCtrl(panel)
+        self.textControl_port = wx.TextCtrl(panel, size=self.custom_size)
         self.textControl_port.SetHint(self.hint_port)
         widgets.append(text_control_label_port)
         widgets.append(self.textControl_port)
 
         text_control_label_database = wx.StaticText(panel, label='Database')
-        self.textControl_database = wx.TextCtrl(panel)
+        self.textControl_database = wx.TextCtrl(panel, size=self.custom_size)
         self.textControl_database.SetHint(self.hint_database)
         widgets.append(text_control_label_database)
         widgets.append(self.textControl_database)
 
         text_control_label_user = wx.StaticText(panel, label='User')
-        self.textControl_user = wx.TextCtrl(panel)
+        self.textControl_user = wx.TextCtrl(panel, size=self.custom_size)
         self.textControl_user.SetHint(self.hint_user)
         widgets.append(text_control_label_user)
         widgets.append(self.textControl_user)
 
         text_control_label_password = wx.StaticText(panel, label='Password')
-        self.textControl_password = wx.TextCtrl(panel, style=wx.TE_PASSWORD)
+        self.textControl_password = wx.TextCtrl(panel, style=wx.TE_PASSWORD, size=self.custom_size)
         widgets.append(text_control_label_password)
         widgets.append(self.textControl_password)
 
@@ -216,6 +218,9 @@ class RedirectText(object):
 
     def write(self,string):
         self.out.WriteText(string)
+
+    #def flush(self):
+    #        pass
 
 
 def main():

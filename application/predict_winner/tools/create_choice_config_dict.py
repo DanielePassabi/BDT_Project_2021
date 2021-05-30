@@ -3,7 +3,6 @@ import sys
 sys.path.append('../../')
 
 from functions.utilities import *
-from config import *
 
 import pandas as pd
 import json
@@ -18,7 +17,7 @@ cols_list = ["settore", "tipo_scelta_contraente", "modalita_realizzazione", "den
 choices_dict = createDictPossibleChoicesForPrediction(df, cols_list)
 
 # Save the dict
-with open('input_possible_choices.json', 'w') as json_file:
+with open('../config/input_possible_choices.json', 'w') as json_file:
     json.dump(choices_dict, json_file)
 
 print("> .json correctly stored")

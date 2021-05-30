@@ -40,14 +40,14 @@ cleanAggiudicatari(agg_dir_path, clean_data_dir_path, clean_agg_csv_name)
 # get the path of the clean AGGIUDICATARI csv
 clean_agg_path = clean_data_dir_path + "/" + clean_agg_csv_name
 
-#exportAggiudicatariToMySQL(clean_agg_path, host, port, database, user, password)
+exportAggiudicatariToMySQL(clean_agg_path, host, port, database, user, password)
 
 cleanCIG(cig_dir_path, clean_agg_path, clean_data_dir_path, agg_cig_csv_name)
 
 # get the path of the clean CIG AGGIUDICATARI csv
 agg_cig_csv_path = clean_data_dir_path + "/" + agg_cig_csv_name
 
-#exportCIGAggiudicatariToMySQL(agg_cig_csv_path, host, port, database, user, password)
+exportCIGAggiudicatariToMySQL(agg_cig_csv_path, host, port, database, user, password)
 
 # Calculate and print total time
 end = time.time()

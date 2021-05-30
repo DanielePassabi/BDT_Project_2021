@@ -84,15 +84,19 @@
 
 [X] Per MySQL studiare in modo più approfondito il tipo delle colonne
 
+[] Spark
+
 [] Aggiungere file `requirements.txt` per INTERO PROGETTO
 
 [] Rendere applicazione finale un `.exe`
 
-[] Tradurre il `README.md`
+[] Finire il `README.md`
+   - titolo sezione developers
+   - finire sezione riguardante app finale
 
-[] Informarsi su altre tecnologie da usare
+[X] Informarsi su altre tecnologie da usare --> Apache Spark
 
-[] Controllare che i prof abbiamo accesso al codice (su Github)
+[X] Controllare che i prof abbiamo accesso al codice (su Github)
 
 [] Alla fine di tutto, correggere i path (da test a ufficiale)
 

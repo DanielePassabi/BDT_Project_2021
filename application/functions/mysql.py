@@ -3,11 +3,9 @@ import sys
 sys.path.append('../')
 
 import pandas as pd
-import numpy as np
 
 import mysql.connector
 from sqlalchemy import create_engine
-import wx
 
 from functions.utilities import *
 
@@ -94,7 +92,8 @@ def connectToMySQL(host, port, database, user, password, showInfo):
             port = port,
             database = database,
             user = user,
-            password = password
+            password = password,
+            auth_plugin='mysql_native_password'
         )
 
         if showInfo:

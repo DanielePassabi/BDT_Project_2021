@@ -4,7 +4,6 @@ sys.path.append('../')
 
 from functions.mysql import *
 from functions.utilities import *
-import time
 
 
 """

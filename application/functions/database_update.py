@@ -4,8 +4,6 @@ sys.path.append('../')
 
 from functions.mysql import *
 from functions.utilities import *
-import time
-import wx
 
 """
 FUNCTIONS FOR UPDATE OF MYSQL DATABASE
@@ -136,6 +134,8 @@ Input:
     > cig_csv_path: path of (raw) CIG .csv with updated data
 """
 def updateCIGTable(host, port, database, user, password, cig_csv_path, interface = False):
+
+    # Query information
     agg_table_name = "elenco_aggiudicatari"
     agg_cig_table_name = "appalti_aggiudicatari_test"
     agg_cig_cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
