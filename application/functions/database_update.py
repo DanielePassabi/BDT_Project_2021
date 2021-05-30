@@ -23,7 +23,7 @@ Input:
 def updateAggiudicatariTable(host, port, database, user, password, agg_csv_path, interface = False):
     
     # Query information
-    agg_table_name = "elenco_aggiudicatari_test"
+    agg_table_name = "elenco_aggiudicatari"
     cols_list = ["cig", "aggiudicatario", "tipo_aggiudicatario"]
 
     print("\n> Updating AGGIUDICATARI datasets")
@@ -93,7 +93,7 @@ Input:
 def updateAggiudicatariTable_slow(host, port, database, user, password, agg_csv_path, interface = False):
 
     # Query information
-    agg_table_name = "elenco_aggiudicatari_test"
+    agg_table_name = "elenco_aggiudicatari"
     agg_cols_list = ["cig", "aggiudicatario", "tipo_aggiudicatario"]
 
     agg_df = importAggiudicatari(agg_csv_path)
@@ -137,7 +137,7 @@ def updateCIGTable(host, port, database, user, password, cig_csv_path, interface
 
     # Query information
     agg_table_name = "elenco_aggiudicatari"
-    agg_cig_table_name = "appalti_aggiudicatari_test"
+    agg_cig_table_name = "appalti_aggiudicatari"
     agg_cig_cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
 
     print("\n> Updating CIG AGGIUDICATARI datasets")

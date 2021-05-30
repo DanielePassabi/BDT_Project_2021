@@ -38,7 +38,7 @@ def cleanAggiudicatari(agg_path, save_path, final_csv_name):
 """
 def exportAggiudicatariToMySQL(agg_path, host, port, database, user, password):
 
-    agg_table_name = "elenco_aggiudicatari_test"
+    agg_table_name = "elenco_aggiudicatari"
     agg_cols_list = ["cig", "aggiudicatario", "tipo_aggiudicatario"]
 
     # Final AGGIUDICATARI .csv data import
@@ -100,7 +100,7 @@ def cleanCIG(cig_path, agg_path, save_path, final_csv_name):
 """
 def exportCIGAggiudicatariToMySQL(agg_cig_csv_path, host, port, database, user, password):
 
-    agg_cig_table_name = "appalti_aggiudicatari_test"
+    agg_cig_table_name = "appalti_aggiudicatari"
     agg_cig_cols_list = ["cig", "numero_gara", "importo_complessivo_gara", "n_lotti_componenti", "importo_lotto", "settore", "data_pubblicazione", "tipo_scelta_contraente", "modalita_realizzazione", "denominazione_amministrazione_appaltante", "sezione_regionale", "descrizione_cpv", "aggiudicatario", "tipo_aggiudicatario"]
 
     # Dataset import

@@ -86,7 +86,7 @@
 
 [] Spark
 
-[] Aggiungere file `requirements.txt` per INTERO PROGETTO
+[X] Aggiungere file `requirements.txt` per INTERO PROGETTO
 
 [] Rendere applicazione finale un `.exe`
 
@@ -98,10 +98,9 @@
 
 [X] Controllare che i prof abbiamo accesso al codice (su Github)
 
-[] Alla fine di tutto, correggere i path (da test a ufficiale)
+[X] Alla fine di tutto, correggere i path (da test a ufficiale)
 
 ## *Cose da fare (meno urgenti)*
 [] aggiungere pulsante su interfaccia per fare backup dopo update
 
 [] fare interfaccia per popolazione iniziale del db
-

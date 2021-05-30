@@ -155,6 +155,11 @@ It is suggested to periodically dump files, possibly in clouds or on a different
 
 The final application is based on the following configuration files and scripts:
 
+A. l'utente utilizza solo l'exe
+- è possibile selezionare bla bla
+- ...
+
+Lo stesso risultato si ottiene lanciando lo script predict_winner_interface.py (file di config in cartella config).
 
 ---
 
