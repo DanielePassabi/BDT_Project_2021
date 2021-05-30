@@ -6,20 +6,20 @@ Project of BDT - Giorgia Villa, Daniele Passabì
 
 ### *Description*
 
-This code provides a possible implementation of a Big Data System able to preform predictions on tenders published by the Italian administrative bodies. It returns the most likely winners of a tender specified by the end-user through a customised interface. Predictions are based on historical data and obtained through a machine learning model running a K-NearestNeighbour classification.
+This code provides a possible implementation of a Big Data System able to preform predictions on tenders published by the Italian administrative bodies. It returns the most likely winners of a tender specified by the end-user through a customised interface. Predictions are based on historical data and obtained through a machine learning model running a K-NearestNeighbour classification algorithm.
 
 ### *How to start (end user)*
 
-To the end-user it is simply required to run the respective file exe. This will open a window were some company and tender information need to be specified. Once done this, it is enough to click on the *Get prediction* button and the prediction for the most likely tender winner will be displayed.
+The end-user is required to run the NOME_DELL_EXE file exe. This will open a window were some company and tender information need to be specified. Once done this, it is enough to click on the *Get prediction* button and the prediction for the most likely tender winner will be displayed.
 
-### *How to start (developer) BLEAH* - DANI NO ME GUSTA, CI PENSO DOPO
+### *How to start (developer)*
 
-The application runs autonomously after the execution of the proper exe file. Nevertheless, data have to be updated monthly.
+We suppose that the first step of the solution (the population of the MySQL database) has already been implmeneted. Therefore from the developer side, the only action to be performed is the update of the above-mentioned database. Recalling that tender information and winners information have to be updated monthly and every six month respectively, to update the databse one should:
 
-- tenders data are updated monthly
-- they are uploaded in the MySQL database
-- the prediction model is trained also on the new data
-- the application is updated and released to the user
+1) Download the new data from.
+2) Run the NOME_DELL_EXE file exe.
+
+    After having selected which kind of data to update and the path of the new .csv together with the MySQL credentials, the application runs autonomously the whole process: first the database is updated, the prediction model is trained also on the new data, the application is updated and released to the user.
 
 ### *Python requirements*
 
@@ -102,7 +102,7 @@ For this reason two different procedures were implemented to update data on the 
 
 The MySQL database can be updated in two ways: through the application (suggested) o by running the Python scripts specifically for the tables in the database.
 
-#### *Update though application*
+#### *Update through application*
 
 - The application for update can be run through the script `update_database_interface.py`
 
@@ -114,9 +114,8 @@ The MySQL database can be updated in two ways: through the application (suggeste
 
 - Once all information have been provided, it is only necessary to click on the *Update DB* button to launch the updating procedure.
 
-- Below some pictures.
-
-  TODO: INSERIRE IMMAGINE APPLICAZIONE
+- Below some pictures
+  ![alt text](update_db.png)
 
 #### *Script Python*
 
@@ -154,4 +153,17 @@ It is suggested to periodically dump files, possibly in clouds or on a different
 
 ### *Final App: Predict Tender Winner*
 
-The final application is based on the following configuration files and scripts.
+The final application is based on the following configuration files and scripts:
+
+
+---
+
+## License
+
+Data used is licensed under a Creative Common Attribution - ShareAlike 4.0 International (CC BY-SA 4.0). [More info here](https://creativecommons.org/licenses/by-sa/4.0/).
+
+It is attributed to the italian Autorità Nazionale Anticorruzione (ANAC). 
+
+Original version of data can be found [here](https://dati.anticorruzione.it/opendata/dataset?page=1). 
+
+---
