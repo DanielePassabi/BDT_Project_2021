@@ -3,6 +3,7 @@ import sys
 sys.path.append('../')
 
 from functions.database_update import *
+from functions.machine_learning_model import *
 import wx
 
 class UpdateDBInterface(wx.Frame):
@@ -197,7 +198,17 @@ class UpdateDBInterface(wx.Frame):
                 elif data_to_update == "AGGIUDICATARI":
                     updateAggiudicatariTable(host, port, database, user, password, csv_path, interface=True)
 
-                dial = wx.MessageDialog(None, "Database correctly updated", "Information", wx.ICON_INFORMATION)
+                print("\n> Re-training the model on new data")
+                db_connection = connectToMySQL_Alchemy(host, port, database, user, password, False)
+
+                print("> Retrieving the data")
+                table = "appalti_aggiudicatari"
+                df = retrieveAllDataFromTable_Alchemy(table, db_connection)
+
+                print("> Training the model")
+                create_KNeighborsClassifier(df, 1000, "../model/knn_data")
+
+                dial = wx.MessageDialog(None, "Database correctly updated, model trained on new data", "Information", wx.ICON_INFORMATION)
                 dial.ShowModal()
 
                     

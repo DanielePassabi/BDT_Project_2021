@@ -27,7 +27,7 @@ Input:
     > training_data
     > K: parameter for KNN
 """
-def create_KNeighborsClassifier(training_data, K):
+def create_KNeighborsClassifier(training_data, K, save_dir):
     
     # get the label
     Y_label = training_data['aggiudicatario'].tolist()
@@ -40,7 +40,7 @@ def create_KNeighborsClassifier(training_data, K):
     knn_encoder = OneHotEncoder(handle_unknown='ignore').fit(X)
 
     # save the encoder (we need it for future predictions)
-    filename = "models_data/KNeighborsClassifier_encoder.sav"
+    filename = save_dir + "/KNeighborsClassifier_encoder.sav"
     pickle.dump(knn_encoder, open(filename, 'wb'))
 
     # encode the training data
@@ -51,7 +51,7 @@ def create_KNeighborsClassifier(training_data, K):
     knn_classifier.fit(X_encoded, Y_label)
 
     # save the model to disk
-    filename = "models_data/KNeighborsClassifier_model.sav"
+    filename = save_dir + "/KNeighborsClassifier_model.sav"
     pickle.dump(knn_classifier, open(filename, 'wb'))
 
     print("> Model created, related information saved on disk.")

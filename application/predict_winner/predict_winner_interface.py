@@ -2,12 +2,16 @@
 import sys
 sys.path.append('../')
 
-from functions.machine_learning_model import *
 from config.model_info import *
+from functions.machine_learning_model import *
 
 import json
 import pickle
 import wx
+
+"""
+Interface
+"""
 
 with open('config/input_possible_choices.json') as f:
   input_possible_choices = json.load(f)
@@ -159,6 +163,13 @@ class PredictWinnerInterface(wx.Frame):
             if not elem:
                 print("Error: you must provide all the information")
                 dial = wx.MessageDialog(None, "Total Tender Value, Number of Lots in Tender and Lot Value are mandatory fields.\nPlease provide some values.", "Error", wx.ICON_EXCLAMATION)
+                dial.ShowModal()
+                all_data = False
+                break
+            if not elem.isnumeric():
+                print("Error: the values provided must be numeric")
+                print("Provided value: ", elem)
+                dial = wx.MessageDialog(None, "Total Tender Value, Number of Lots in Tender and Lot Value are numeric fields.\nPlease provide some numeric values.", "Error", wx.ICON_EXCLAMATION)
                 dial.ShowModal()
                 all_data = False
                 break

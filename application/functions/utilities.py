@@ -87,9 +87,10 @@ def cleanCIG(cig_df):
     # C - Custom clean for column modalita_realizzazione
     cig_df["modalita_realizzazione"] = cig_df["modalita_realizzazione"].apply(lambda x: x.replace("DAPPALTO", "D APPALTO"))
 
-    # D - Custom clean for column denominazione_amministrazione_appaltante
+    # D - Custom clean for columns denominazione_amministrazione_appaltante and sezione_regionale
     cig_df["denominazione_amministrazione_appaltante"] = cig_df["denominazione_amministrazione_appaltante"].apply(lambda x: x.replace("S P A", "SPA"))
     cig_df["denominazione_amministrazione_appaltante"] = cig_df["denominazione_amministrazione_appaltante"].apply(lambda x: x.replace("S R L", "SRL"))
+    cig_df["sezione_regionale"] = cig_df["sezione_regionale"].apply(lambda x: x.replace("DAOSTA", "D AOSTA"))
 
     # Return clean df
     return cig_df

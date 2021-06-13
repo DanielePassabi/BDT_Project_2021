@@ -84,11 +84,11 @@
 
 [X] Per MySQL studiare in modo più approfondito il tipo delle colonne
 
-[] Spark
+[] Spark :(
 
 [X] Aggiungere file `requirements.txt` per INTERO PROGETTO
 
-[] Rendere applicazione finale un `.exe`
+[] Rendere applicazione finale un `.exe` --> non funzionano i soliti metodi :(
 
 [] Finire il `README.md`
    - titolo sezione developers

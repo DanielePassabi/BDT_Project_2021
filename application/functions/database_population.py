@@ -53,7 +53,7 @@ def exportAggiudicatariToMySQL(agg_path, host, port, database, user, password):
     # Execute the query
     print("\n> Inserting data into", agg_table_name)
     insertDataInTable(df, cursor, agg_table_name, agg_cols_list)
-    print("> BD correctly updated")
+    print("> DB correctly updated")
 
     # Close the connection
     closeMySQLConnection(cursor, connection)

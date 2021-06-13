@@ -8,8 +8,6 @@ This code provides a possible implementation of a Big Data System able to prefor
 
 ## Set ups
 
-
-
 ### *How to start (end user)*
 
 The end-user is required to run the NOME_DELL_EXE file exe. This will open a window were some company and tender information need to be specified. After this, it is enough to click on the *Get prediction* button and the prediction for the most likely tender winner will be displayed.
@@ -119,6 +117,7 @@ The MySQL database can be updated in two ways: through the application (suggeste
 - Once all information have been provided, it is only necessary to click on the *Update DB* button to launch the updating procedure.
 
   Below some pictures
+
   ![alt text](update_db.png)
 
 #### *Script Python*
@@ -159,10 +158,11 @@ It is suggested to periodically dump files, possibly in clouds or on a different
 
 ## Final App: Predict Winner
 
-The final application is runned via an .exe. The user is required to provide some information related to the tender of interest as shown in the preview below:
+The final application is run via an .exe. The user is required to provide some information related to the tender of interest as shown in the preview below:
 
 ![alt text](pred_winner.png)
-By clicking on *Get Preditction* the name of the predicted winner for the given tender is displayed.
+
+By clicking on *Get Prediction* the name of the predicted winner for the given tender is displayed.
 
 The same result can be achieved by running the script `predict_winner_interface.py`. The configuration file of this script is inside the *config* folder.
 
@@ -172,6 +172,6 @@ The same result can be achieved by running the script `predict_winner_interface.
 
 Data used is licensed under a Creative Common Attribution - ShareAlike 4.0 International (CC BY-SA 4.0). [More info here](https://creativecommons.org/licenses/by-sa/4.0/).
 
-It is attributed to the italian Autorità Nazionale Anticorruzione (ANAC).
+It is attributed to the Italian Autorità Nazionale Anticorruzione (ANAC).
 
 Original version of data can be found [here](https://dati.anticorruzione.it/opendata/dataset?page=1).

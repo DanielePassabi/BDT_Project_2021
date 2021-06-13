@@ -73,7 +73,7 @@ def updateAggiudicatariTable(host, port, database, user, password, agg_csv_path,
     # Inserting new AGGIUDICATARI data into the db
     print("\n> Inserting new data into", agg_table_name)
     insertDataInTable(new_entries, cursor, agg_table_name, cols_list, interface)
-    print("\n> BD correctly updated")
+    print("\n> DB correctly updated")
 
     if interface:
         refreshGUI()
@@ -116,7 +116,7 @@ def updateAggiudicatariTable_slow(host, port, database, user, password, agg_csv_
     # Inserting new AGGIUDICATARI data into the db
     print("> Inserting new data into", agg_table_name)
     insertDataInTable(agg_df, cursor, agg_table_name, agg_cols_list, interface)
-    print("> BD correctly updated")
+    print("> DB correctly updated")
 
     # Close MySQL connection
     closeMySQLConnection(cursor, connection)
@@ -196,7 +196,7 @@ def updateCIGTable(host, port, database, user, password, cig_csv_path, interface
     # B. execute the query
     print("\n> Inserting data into", agg_cig_table_name)
     insertDataInTable(full_df, cursor, agg_cig_table_name, agg_cig_cols_list, interface)
-    print("\n> BD correctly updated")
+    print("\n> DB correctly updated")
 
     # C. close the connection
     closeMySQLConnection(cursor, connection)
