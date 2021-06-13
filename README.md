@@ -16,7 +16,7 @@ The end-user is required to run the NOME_DELL_EXE file exe. This will open a win
 
 ### *How to start (developer)*
 
-We suppose that the first step of the solution (the population of the MySQL database) has already been implmeneted. Therefore from the developer side, the only action to be performed is the update of the above-mentioned database. Recalling that tender information and winners information have to be updated monthly and every six month respectively, to update the databse one should:
+We suppose that the first step of the solution (the population of the MySQL database) has already been implemented. Therefore from the developer side, the only action to be performed is the update of the above-mentioned database. Recalling that tender information and winners information have to be updated monthly and every six month respectively, to update the database one should:
 
 1) Download the new data from [ANAC](https://dati.anticorruzione.it/opendata/dataset?page=1).
 2) Run the NOME_DELL_EXE file exe.
@@ -80,7 +80,7 @@ It is the very first step and it is thought to be executed only once.
 
 In folder `database_population` there are two files.
 
-- `config.py`, with configuration settings necessary to populate the database for the first time. In details in contains:
+- `config.py`, with configuration settings necessary to populate the database for the first time. In details it contains:
   - Paths of folders of the csv files downloaded from ANAC official website, available at this [link](https://dati.anticorruzione.it/opendata/dataset?page=1).
   - Credentials of the MySQL database in which the cleaned data will be stored
 
